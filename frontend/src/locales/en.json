@@ -1,0 +1,276 @@
+{
+  "landing": {
+    "headline": {
+      "line1": "Find Cure to",
+      "line2": "your Problems",
+      "line3": "through AyurCure"
+    },
+    "subtext": "Bridging Healthcare Gaps with Ayurvedic Wisdom & Expert Support",
+    "authBtn": "LOGIN / SIGN UP",
+    "about": {
+      "title": "About AyurCure",
+      "intro": "AyurCure is an eco-friendly, cost-effective digital platform that empowers individuals to manage common health issues through accessible Ayurvedic remedies and expert guidance. By blending ancient wisdom with modern technology, AyurCure bridges critical gaps in healthcare—especially for underserved rural communities"
+    },
+    "features": {
+      "title": "AyurCure Features",
+      "cards": {
+        "search": {
+          "title": "🔍 Symptom & Herb Search",
+          "text": "Search symptoms like 'cold' or herbs like 'Tulsi' to discover Ayurvedic uses."
+        },
+        "remedy": {
+          "title": "🌿 Trusted Remedy Cards",
+          "text": "Remedy cards with preparation methods (paste, tea, oil), dosage & instructions."
+        },
+        "consult": {
+          "title": "🧑‍⚕️ Online Ayurvedic Consultations",
+          "text": "Chat or video consult with certified Ayurvedic doctors."
+        },
+        "bookmark": {
+          "title": "📌 Save & Bookmark Remedies",
+          "text": "Bookmark remedies and access them in your saved list—stored locally."
+        },
+        "multilang": {
+          "title": "🌍 Multilingual Support",
+          "text": "Switch between Indian languages to browse content in your native tongue."
+        },
+        "reminder": {
+          "title": "🔔 Daily Medicine Reminders",
+          "text": "Automated reminders for Ayurvedic medicine intake tracking."
+        },
+        "dualalert": {
+          "title": "👨‍👩‍👧‍👦 Dual Number Alerts",
+          "text": "Reminders sent to both primary and alternate numbers for family awareness."
+        },
+        "emergency": {
+          "title": "🚨 Emergency Contact Integration",
+          "text": "Emergency button dials 108 instantly—essential for rural or elderly users."
+        },
+        "renewal": {
+          "title": "🗕️ Renewal Alerts with Color Coding",
+          "text": "Color-coded alerts: 🔴 Today, 🟠 3 Days, 🟢 1 Week+ for prescription renewals."
+        }
+      }
+    },
+    "difference": {
+      "title": "How AyurCure Makes a Difference",
+      "intro": "AyurCure is more than just a digital health platform — It's a mission to make holistic wellness accessible, affordable, and practical for everyone. Whether you're in a rural village or a bustling city, AyurCure empowers you to take control of your health through trusted Ayurvedic knowledge, daily guidance, and expert support.",
+      "points": [
+        "Bridges the healthcare gap for underserved and rural populations",
+        "Encourages safe, side-effect-free healing using natural remedies",
+        "Revives awareness and trust in India’s traditional medical heritage",
+        "Helps users build consistent wellness habits with reminders & tools",
+        "Provides affordable alternatives to expensive treatments"
+      ]
+    },
+    "flow": {
+      "title": "Your Personalized Health Companion",
+      "steps": {
+        "1": {
+          "title": "Search with Confidence",
+          "desc": "Type in symptoms like 'cold' or 'diabetes' with intelligent auto-suggestions."
+        },
+        "2": {
+          "title": "Discover Trusted Remedies",
+          "desc": "Find natural treatments like Neem paste for acne or Tulsi tea for colds."
+        },
+        "3": {
+          "title": "Detailed Guidance",
+          "desc": "Learn preparation methods (paste, decoction, oil), exact dosage & timing."
+        },
+        "4": {
+          "title": "Consult with Experts",
+          "desc": "Connect with doctors by location or through teleconsultations."
+        }
+      }
+    }
+  },
+  "emergency": {
+    "sos": "🚨",
+    "title": "Emergency?",
+    "call": "Call 108 Now"
+  },
+  "forgot": {
+    "title": "Reset Your Password",
+    "placeholder": "Enter registered email",
+    "send": "Send"
+  },
+  "login": {
+    "newTo": "New to AyurCure? Register Now",
+    "title": "Login",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "show": "Show",
+    "hide": "Hide",
+    "loginBtn": "Login",
+    "forgotPassword": "Forgot Password?"
+  },
+  "navbar": {
+    "home": "Home",
+    "remedies": "Remedies",
+    "doctors": "Doctors",
+    "about": "About"
+  },
+  "home": {
+    "hero": {
+      "title": "AyurCure",
+      "subtitle": "Natural Healing Near You",
+      "button": "Explore Remedies"
+    },
+    "remedyHighlights": "Popular Natural Remedies",
+    "search": {
+      "title": "Search for Remedies by Symptom",
+      "placeholder": "e.g. Cough, Skin Allergy, Indigestion...",
+      "button": "Search",
+      "limitMsg": "Search limit reached. Try again later.",
+      "alertMessage": "Searching for remedies related to \"{query}\"...",
+      "categories": {
+        "skin": "Skin",
+        "hair": "Hair",
+        "digestion": "Digestion",
+        "weight": "Weight",
+        "immunity": "Immunity",
+        "cold": "Cold & Flu"
+      }
+    },
+    "consult": {
+      "title": "Consult Certified Ayurveda Doctors",
+      "desc": "Speak to verified professionals based on your health needs — online or in-person.",
+      "button": "Find Doctors"
+    },
+    "featuresTitle": "Why Choose AyurCure?",
+    "features": {
+      "naturalRemedies": {
+        "title": "100% Natural Remedies",
+        "description": "Handpicked herbal treatments with no side effects."
+      },
+      "expertDoctors": {
+        "title": "Expert Guidance",
+        "description": "Consult experienced Ayurvedic doctors for personalized care."
+      },
+      "guidedKnowledge": {
+        "title": "In-Depth Knowledge",
+        "description": "Learn proper dosages, preparation, and timing for each remedy."
+      },
+      "accessForAll": {
+        "title": "Accessible for All",
+        "description": "Inclusive care regardless of age, background, or region."
+      },
+      "emergencyHelp": {
+        "title": "Emergency Support",
+        "description": "Quick links and numbers for urgent health issues."
+      }
+    },
+    "emergency": {
+      "sos": "SOS:",
+      "title": "Emergency Help at Your Fingertips",
+      "call": "Call 108 Now"
+    }
+  },
+  "doctors": {
+    "title": "Our Doctors",
+    "searchPlaceholder": "Search by symptom (e.g. acne, pcod)…",
+    "bookButton": "Book Appointment",
+    "specialization": "Specialization",
+    "location": "Location",
+    "phone": "Phone"
+  },
+  "profile": {
+    "back": "Back",
+    "personalInfo": "Personal Information",
+    "memberSince": "Member Since",
+    "dob": "Date of Birth",
+    "gender": "Gender",
+    "genderMale": "Male",
+    "phone": "Phone",
+    "notifications": "Notifications",
+    "newMessage": "You have 1 new message",
+    "schedule": "Appointment Schedule",
+    "nextAppointment": "Next: April 8, 2094",
+    "savedRemedies": "Saved Remedies",
+    "remediesSaved": "3 remedies saved",
+    "medicalHistory": "Medical History",
+    "medicalTip": "Ginger tea may help..."
+  },
+  "notifications": {
+    "title": "🔔 Notifications",
+    "markAsRead": "Mark as Read",
+    "noNotifications": "No Notifications!",
+    "sample": [
+      {
+        "title": "Take your morning remedy",
+        "description": "It’s time to take your Tulsi + Neem for immunity.",
+        "time": "2 hours ago"
+      },
+      {
+        "title": "New Ayurveda Tip!",
+        "description": "Turmeric boosts immunity! Don’t miss today’s tip.",
+        "time": "1 day ago"
+      },
+      {
+        "title": "Parental Reminder Setup",
+        "description": "Set up parental control to monitor your child’s dosage.",
+        "time": "3 days ago"
+      }
+    ]
+  },
+  "savedRemedies": {
+    "title": "💗 Saved Remedies",
+    "noRemedies": "No Saved Remedies Found!",
+    "removeTitle": "Remove",
+    "removeFromSaved": "Remove from Saved",
+    "remedy1": {
+      "title": "🌿 Tulsi + Honey Remedy",
+      "description": "Boost immunity with Tulsi and Honey every morning."
+    },
+    "remedy2": {
+      "title": "🍿 Turmeric Milk",
+      "description": "Great for cold & joint pain. Drink before sleep."
+    },
+    "remedy3": {
+      "title": "🍋 Lemon + Ginger Detox",
+      "description": "Improves digestion. Best taken on an empty stomach."
+    }
+  },
+  "appointment": {
+    "title": "Book Appointment",
+    "fullName": "Full Name",
+    "age": "Age",
+    "gender": "Gender",
+    "selectGender": "Select Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "contact": "Contact Number",
+    "email": "Email",
+    "date": "Preferred Date & Time",
+    "doctor": "Doctor's Name",
+    "concern": "Health Concern",
+    "book": "Book Appointment"
+  },
+  "footer": {
+    "brandTitle": "AyurCure",
+    "brandDesc": "Your digital health partner for Ayurvedic remedies and expert guidance. Empowering every home with holistic wellness – accessible, natural, and effective.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "remedies": "Remedies",
+      "doctors": "Doctors"
+    },
+    "features": {
+      "title": "Features",
+      "symptom": "Symptom Search",
+      "remedies": "Trusted Remedies",
+      "consult": "Expert Consultations",
+      "emergency": "Emergency Integration",
+      "reminders": "Daily Reminders"
+    },
+    "contact": {
+      "title": "Contact",
+      "location": "Hyderabad, Telangana, India",
+      "phone": "+91 98765 43210",
+      "email": "ayurcure.help@gmail.com"
+    },
+    "copyright": "AyurCure. All rights reserved."
+  }
+}
