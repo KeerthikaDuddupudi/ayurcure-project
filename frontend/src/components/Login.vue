@@ -51,7 +51,12 @@ export default {
 
         if (response.data.success) {
           this.success = "Login successful!";
-          this.$emit("login-success", response.data.user); // Optional: Pass user data to parent
+
+          // ✅ Store email in localStorage
+          localStorage.setItem("loggedInEmail", this.email);
+
+          // Optionally emit to parent
+          this.$emit("login-success", response.data.user);
         } else {
           this.error = response.data.message || "Login failed.";
         }

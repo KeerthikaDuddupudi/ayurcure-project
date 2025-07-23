@@ -5,7 +5,7 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 
-// Load environment variables from .env
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
@@ -15,19 +15,21 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(cors());
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// API Routes
+// Base Route
 app.get("/", (req, res) => {
   res.send("🩺 Doctor Appointment System API is running");
 });
 
+// Routes
 const authRoutes = require("./routes/auth");
 const doctorRoutes = require("./routes/doctors");
 const appointmentRoutes = require("./routes/appointmentRoutes");
@@ -41,24 +43,30 @@ app.use("/api/notifications", notificationRoutes);
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+    origin: "*", // You can restrict this later to your frontend URL
+    methods: ["GET", "POST"],
+  },
 });
+
+// Make io globally available (optional)
 global.io = io;
 
+// Socket.IO Events
 io.on("connection", (socket) => {
-  console.log("🟢 A user connected");
+  console.log("🟢 A user connected:", socket.id);
 
-  // You can listen for custom events here
-  // socket.on("event-name", data => { ... });
+  // Example: Listen to a custom event
+  // socket.on("sendNotification", (data) => {
+  //   console.log("📩 Notification received:", data);
+  //   io.emit("receiveNotification", data); // Broadcast
+  // });
 
   socket.on("disconnect", () => {
-    console.log("🔴 A user disconnected");
+    console.log("🔴 A user disconnected:", socket.id);
   });
 });
 
-// Server startup
+// Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);

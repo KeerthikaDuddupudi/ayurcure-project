@@ -13,8 +13,8 @@
         <input type="file" id="fileInput" @change="handleImageUpload" accept="image/*" hidden />
       </div>
       <div class="profile-details">
-        <h2>John Doe</h2>
-        <p>john.doe@example.com</p>
+        <h2>{{ userData.name || 'Guest User' }}</h2>
+        <p>{{ userData.email || 'guest@example.com' }}</p>
       </div>
     </div>
 
@@ -24,19 +24,19 @@
       <div class="info-table">
         <div class="row">
           <div class="label">{{ $t('profile.memberSince') }}</div>
-          <div class="value">January 2094</div>
+          <div class="value">{{ userData.memberSince || 'N/A' }}</div>
         </div>
         <div class="row">
           <div class="label">{{ $t('profile.dob') }}</div>
-          <div class="value">July 20, 1990</div>
+          <div class="value">{{ userData.dob || 'N/A' }}</div>
         </div>
         <div class="row">
           <div class="label">{{ $t('profile.gender') }}</div>
-          <div class="value">{{ $t('profile.genderMale') }}</div>
+          <div class="value">{{ userData.gender || 'N/A' }}</div>
         </div>
         <div class="row">
           <div class="label">{{ $t('profile.phone') }}</div>
-          <div class="value">(123) 456-7890</div>
+          <div class="value">{{ userData.phone || 'N/A' }}</div>
         </div>
       </div>
     </div>
@@ -79,16 +79,28 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue'
 import defaultImage from '../assets/image.png'
 
 const imageUrl = ref(defaultImage)
+const userData = ref({})
 
 // Load saved profile image if available
-const stored = localStorage.getItem('profileImage')
-if (stored) imageUrl.value = stored
+const storedImage = localStorage.getItem('profileImage')
+if (storedImage) {
+  imageUrl.value = storedImage
+}
+
+// Load user data from localStorage
+const storedUser = localStorage.getItem('user')
+if (storedUser) {
+  try {
+    userData.value = JSON.parse(storedUser)
+  } catch (e) {
+    console.error("Invalid user JSON in localStorage")
+  }
+}
 
 function handleImageUpload(event) {
   const file = event.target.files[0]
@@ -96,12 +108,11 @@ function handleImageUpload(event) {
     const reader = new FileReader()
     reader.onload = () => {
       imageUrl.value = reader.result
-      localStorage.setItem('profileImage', reader.result) // Save to localStorage
+      localStorage.setItem('profileImage', reader.result)
     }
     reader.readAsDataURL(file)
   }
 }
-
 </script>
 
 <style>

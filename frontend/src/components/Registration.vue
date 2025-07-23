@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     async register() {
-      // Basic client-side validation
       if (!this.name || !this.email || !this.password) {
         this.errorMessage = 'Please fill in all required fields.';
         return;
@@ -47,9 +46,11 @@ export default {
         const data = await response.json();
 
         if (response.ok) {
+          // ✅ Store email in localStorage
+          localStorage.setItem('userEmail', this.email.trim());
+
           alert(`Registration successful!`);
-          // Optional: redirect to login page
-          this.$router.push('/login');
+          this.$router.push('/');
         } else {
           this.errorMessage = data.message || 'Registration failed.';
         }
@@ -83,6 +84,7 @@ button {
   font-weight: bold;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
 }
 .error {
   color: red;

@@ -1,16 +1,20 @@
 <template>
   <div class="appointment-container">
-    <!-- Title -->
-    <h1 class="main-title">Appointment Schedule</h1>
+    <h1 class="main-title">Your Appointment Schedule</h1>
 
-    <!-- Left: Calendar + Time Slots -->
-    <div class="calendar-slot-panel">
+    <!-- Email fallback input -->
+    <div v-if="!email" class="email-input-box">
+      <label for="email">Enter your email:</label>
+      <input id="email" v-model="emailInput" type="email" />
+      <button @click="setEmail">Load Appointments</button>
+    </div>
+
+    <div v-else class="calendar-slot-panel">
       <div class="calendar-box">
         <h3>Select Date</h3>
         <input type="date" v-model="selectedDate" />
       </div>
 
-      <!-- Morning Slots -->
       <div class="slot-group">
         <h4>🌞 Morning (9:00 AM - 12:00 PM)</h4>
         <div class="slot-grid">
@@ -25,7 +29,6 @@
         </div>
       </div>
 
-      <!-- Evening Slots -->
       <div class="slot-group">
         <h4>🌙 Evening (5:00 PM - 9:00 PM)</h4>
         <div class="slot-grid">
@@ -41,23 +44,34 @@
       </div>
     </div>
 
-    <!-- Right: Appointments -->
-    <div class="appointments-panel">
-      <h2>Appointments for {{ selectedDate }}</h2>
-      <div
-        v-for="doctor in doctors"
-        :key="doctor.id"
-        class="appointment-card"
-      >
-        <img :src="doctor.image" class="doctor-img-square" />
-        <div class="doctor-info">
-          <h3>{{ doctor.name }}</h3>
-          <p><strong>{{ doctor.degree }}</strong></p>
-          <p>{{ doctor.specialization }} — {{ doctor.location }}</p>
-          <p><strong>Phone:</strong> {{ doctor.phone }}</p>
-          <p><strong>Symptoms:</strong> {{ doctor.symptoms.join(', ') }}</p>
-          <p><strong>Time:</strong> {{ selectedTime }}</p>
-          <button @click="cancelAppointment(doctor.id)">Cancel</button>
+    <div class="appointments-panel" v-if="email">
+      <h2>
+        All Confirmed Appointments for
+        <span style="color: #2a6cd4">{{ email }}</span>
+      </h2>
+      <div v-if="filteredAppointments.length === 0">
+        No confirmed appointments found.
+      </div>
+      <div v-else>
+        <div
+          v-for="appointment in filteredAppointments"
+          :key="appointment._id"
+          class="appointment-card"
+        >
+          <img :src="defaultDoctorImage" class="doctor-img-square" />
+          <div class="doctor-info">
+            <h3>{{ appointment.doctorId?.name || 'Doctor' }}</h3>
+            <p><strong>{{ appointment.doctorId?.degree || 'Degree' }}</strong></p>
+            <p>
+              {{ appointment.doctorId?.specialization || 'Specialist' }} -
+              {{ appointment.doctorId?.location || 'Location' }}
+            </p>
+            <p><strong>Phone:</strong> {{ appointment.doctorId?.phone || 'N/A' }}</p>
+            <p><strong>Concern:</strong> {{ appointment.concern || 'N/A' }}</p>
+            <p><strong>Time of Day:</strong> {{ appointment.timeOfDay || 'Not Set' }}</p>
+            <p><strong>Status:</strong> {{ appointment.status || 'Pending' }}</p>
+            <button @click="cancelAppointment(appointment._id)">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
@@ -65,69 +79,78 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import anjali from '../assets/doctor1.jpg'
-import neha from '../assets/doctor.png'
-import rajesh from '../assets/doctor.png'
-import amit from '../assets/doctor1.jpg'
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+import defaultDoctorImage from '../assets/doctor.png'
 
+// State
 const selectedDate = ref(new Date().toISOString().substr(0, 10))
-const selectedTime = ref('10:10 AM')
+const selectedTime = ref('')
+const appointments = ref([])
+const emailInput = ref('')
+const email = ref('')
 
-const morningSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '10:10 AM', '10:30 AM', '11:00 AM']
+// Slots
+const morningSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']
 const eveningSlots = ['5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM']
 
-const doctors = ref([
-  {
-    id: 1,
-    name: 'Dr. Anjali Sharma',
-    degree: 'BAMS, MD (Ayurveda)',
-    specialization: 'Dermatologist',
-    location: 'Delhi, India',
-    phone: '+91 9876543210',
-    image: anjali,
-    symptoms: ['acne', 'rash', 'itching']
-  },
-  {
-    id: 2,
-    name: 'Dr. Neha Joshi',
-    degree: 'BAMS, MS (Ayurveda)',
-    specialization: 'Gynecologist',
-    location: 'Mumbai, India',
-    phone: '+91 8765432109',
-    image: neha,
-    symptoms: ['pcod', 'menstrual', 'fertility']
-  },
-  {
-    id: 3,
-    name: 'Dr. Rajesh Verma',
-    degree: 'BAMS',
-    specialization: 'Kaya Chikitsa',
-    location: 'Pune, India',
-    phone: '+91 7654321098',
-    image: rajesh,
-    symptoms: ['diabetes', 'weakness', 'fever']
-  },
-  {
-    id: 4,
-    name: 'Dr. Amit Deshmukh',
-    degree: 'BAMS, PhD',
-    specialization: 'Herbal Expert',
-    location: 'Bengaluru, India',
-    phone: '+91 6543210987',
-    image: amit,
-    symptoms: ['herbs', 'plant', 'natural']
+// Load email from localStorage on mount
+onMounted(() => {
+  try {
+    const storedEmail = localStorage.getItem('userEmail')
+    if (storedEmail) {
+      email.value = storedEmail
+      fetchAppointments()
+    }
+  } catch (err) {
+    console.error('❌ Failed to load email from localStorage:', err)
   }
-])
+})
 
-function cancelAppointment(id) {
-  const index = doctors.value.findIndex(doc => doc.id === id)
-  if (index !== -1) {
-    doctors.value.splice(index, 1)
-    alert(`Appointment with Doctor ID ${id} has been canceled.`)
+// Fallback if not stored
+const setEmail = () => {
+  if (!emailInput.value) {
+    alert('Please enter an email address.')
+    return
+  }
+  email.value = emailInput.value
+  localStorage.setItem('userEmail', emailInput.value)
+  fetchAppointments()
+}
+
+// Fetch appointments
+const fetchAppointments = async () => {
+  if (!email.value) return
+
+  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+  const apiUrl = `${baseURL}/api/appointments/user/${email.value}`
+
+  try {
+    const res = await axios.get(apiUrl)
+    appointments.value = res.data.filter(a => a.status?.toLowerCase() === 'confirmed')
+    console.log('✅ Appointments fetched:', appointments.value)
+  } catch (err) {
+    console.error('❌ Error fetching appointments:', err.message)
+    appointments.value = []
   }
 }
+
+// Cancel
+const cancelAppointment = async (id) => {
+  try {
+    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+    await axios.delete(`${baseURL}/api/appointments/${id}`)
+    alert('✅ Appointment cancelled successfully.')
+    fetchAppointments()
+  } catch (err) {
+    alert('❌ Failed to cancel appointment.')
+    console.error(err)
+  }
+}
+
+const filteredAppointments = computed(() => appointments.value)
 </script>
+
 
 <style scoped>
 .appointment-container {
@@ -137,8 +160,6 @@ function cancelAppointment(id) {
   padding: 30px;
   background-color: #f4f6fa;
 }
-
-/* Title */
 .main-title {
   width: 100%;
   font-size: 28px;
@@ -147,8 +168,26 @@ function cancelAppointment(id) {
   color: #2a6cd4;
   text-align: center;
 }
-
-/* Left Calendar/Slot Panel */
+.email-input-box {
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+}
+.email-input-box input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 260px;
+  margin: 0 10px;
+}
+.email-input-box button {
+  padding: 8px 14px;
+  background-color: #2a6cd4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 .calendar-slot-panel {
   flex: 1;
   max-width: 320px;
@@ -157,12 +196,10 @@ function cancelAppointment(id) {
   padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
-
 .calendar-box h3 {
   font-size: 16px;
   margin-bottom: 10px;
 }
-
 .calendar-box input[type='date'] {
   width: 100%;
   padding: 10px;
@@ -170,23 +207,19 @@ function cancelAppointment(id) {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
-
 .slot-group {
   margin-top: 24px;
 }
-
 .slot-group h4 {
   font-size: 15px;
   margin-bottom: 10px;
   color: #333;
 }
-
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
-
 .time-slot {
   padding: 8px;
   font-size: 14px;
@@ -197,28 +230,22 @@ function cancelAppointment(id) {
   text-align: center;
   transition: background 0.3s ease;
 }
-
 .time-slot:hover {
   background-color: #e8f0fe;
 }
-
 .time-slot.active {
   background-color: #2a6cd4;
   color: white;
   border-color: #2a6cd4;
 }
-
-/* Right Appointment Panel */
 .appointments-panel {
   flex: 2;
   min-width: 300px;
 }
-
 .appointments-panel h2 {
   font-size: 20px;
   margin-bottom: 16px;
 }
-
 .appointment-card {
   display: flex;
   background: white;
@@ -228,7 +255,6 @@ function cancelAppointment(id) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   align-items: flex-start;
 }
-
 .doctor-img-square {
   width: 100px;
   height: 100px;
@@ -237,23 +263,19 @@ function cancelAppointment(id) {
   margin-right: 16px;
   border: 2px solid #2a6cd4;
 }
-
 .doctor-info {
   flex: 1;
 }
-
 .doctor-info h3 {
   margin: 0;
   font-size: 18px;
   color: #2a6cd4;
 }
-
 .doctor-info p {
   margin: 4px 0;
   font-size: 14px;
   color: #333;
 }
-
 .doctor-info button {
   margin-top: 10px;
   padding: 8px 14px;
@@ -265,80 +287,7 @@ function cancelAppointment(id) {
   cursor: pointer;
   transition: background 0.3s;
 }
-
 .doctor-info button:hover {
   background-color: #d62828;
 }
-
-/* 🌙 Dark Theme Support */
-body.dark-theme .appointment-container {
-  background-color: #121212;
-}
-
-body.dark-theme .main-title {
-  color: #e0f2fe;
-}
-
-body.dark-theme .calendar-slot-panel {
-  background-color: #1e1e1e;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .calendar-box h3,
-body.dark-theme .slot-group h4 {
-  color: #f5f5f5;
-}
-
-body.dark-theme .calendar-box input[type='date'] {
-  background-color: #2a2a2a;
-  color: #ffffff;
-  border-color: #444;
-}
-
-body.dark-theme .time-slot {
-  background-color: #1e1e1e;
-  color: #ddd;
-  border-color: #444;
-}
-
-body.dark-theme .time-slot:hover {
-  background-color: #374151;
-}
-
-body.dark-theme .time-slot.active {
-  background-color: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
-}
-
-body.dark-theme .appointments-panel h2 {
-  color: #f5f5f5;
-}
-
-body.dark-theme .appointment-card {
-  background-color: #1f1f1f;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .doctor-img-square {
-  border-color: #3b82f6;
-}
-
-body.dark-theme .doctor-info h3 {
-  color: #60a5fa;
-}
-
-body.dark-theme .doctor-info p {
-  color: #cccccc;
-}
-
-body.dark-theme .doctor-info button {
-  background-color: #dc2626;
-  color: white;
-}
-
-body.dark-theme .doctor-info button:hover {
-  background-color: #b91c1c;
-}
-
 </style>
