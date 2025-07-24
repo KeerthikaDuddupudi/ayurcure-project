@@ -23,6 +23,7 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       dob,
       gender,
+      memberSince: new Date(), // ✅ set memberSince to current date
     });
 
     await newUser.save();
@@ -41,6 +42,7 @@ exports.signup = async (req, res) => {
         phone: newUser.phone,
         dob: newUser.dob,
         gender: newUser.gender,
+        memberSince: newUser.memberSince,
       },
     });
 
@@ -74,6 +76,7 @@ exports.login = async (req, res) => {
         phone: user.phone,
         dob: user.dob,
         gender: user.gender,
+        memberSince: user.memberSince,
       },
     });
   } catch (err) {

@@ -9,6 +9,7 @@
       <button @click="setEmail">Load Appointments</button>
     </div>
 
+    <!-- Left Panel -->
     <div v-else class="calendar-slot-panel">
       <div class="calendar-box">
         <h3>Select Date</h3>
@@ -44,15 +45,22 @@
       </div>
     </div>
 
+    <!-- Appointments Panel -->
     <div class="appointments-panel" v-if="email">
       <h2>
-        All Confirmed Appointments for
-        <span style="color: #2a6cd4">{{ email }}</span>
+        All Confirmed Appointments on
+        <span style="color: #2a6cd4">{{ new Date(selectedDate).toDateString() }}</span>
       </h2>
+
+      <button v-if="filteredAppointments.length" @click="downloadPDF" class="download-btn">
+        ⬇️ Download PDF
+      </button>
+
       <div v-if="filteredAppointments.length === 0">
         No confirmed appointments found.
       </div>
-      <div v-else>
+
+      <div id="pdf-content" v-else>
         <div
           v-for="appointment in filteredAppointments"
           :key="appointment._id"
@@ -68,6 +76,7 @@
             </p>
             <p><strong>Phone:</strong> {{ appointment.doctorId?.phone || 'N/A' }}</p>
             <p><strong>Concern:</strong> {{ appointment.concern || 'N/A' }}</p>
+            <p><strong>Date:</strong> {{ new Date(appointment.date).toDateString() || 'N/A' }}</p>
             <p><strong>Time of Day:</strong> {{ appointment.timeOfDay || 'Not Set' }}</p>
             <p><strong>Status:</strong> {{ appointment.status || 'Pending' }}</p>
             <button @click="cancelAppointment(appointment._id)">Cancel</button>
@@ -82,6 +91,8 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import defaultDoctorImage from '../assets/doctor.png'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 // State
 const selectedDate = ref(new Date().toISOString().substr(0, 10))
@@ -107,7 +118,6 @@ onMounted(() => {
   }
 })
 
-// Fallback if not stored
 const setEmail = () => {
   if (!emailInput.value) {
     alert('Please enter an email address.')
@@ -118,7 +128,6 @@ const setEmail = () => {
   fetchAppointments()
 }
 
-// Fetch appointments
 const fetchAppointments = async () => {
   if (!email.value) return
 
@@ -128,14 +137,12 @@ const fetchAppointments = async () => {
   try {
     const res = await axios.get(apiUrl)
     appointments.value = res.data.filter(a => a.status?.toLowerCase() === 'confirmed')
-    console.log('✅ Appointments fetched:', appointments.value)
   } catch (err) {
     console.error('❌ Error fetching appointments:', err.message)
     appointments.value = []
   }
 }
 
-// Cancel
 const cancelAppointment = async (id) => {
   try {
     const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -148,12 +155,36 @@ const cancelAppointment = async (id) => {
   }
 }
 
-const filteredAppointments = computed(() => appointments.value)
-</script>
+// Filtered appointments
+const filteredAppointments = computed(() => {
+  return appointments.value.filter(appointment => {
+    const appointmentDate = new Date(appointment.date).toISOString().substr(0, 10)
+    return appointmentDate === selectedDate.value
+  })
+})
 
+// PDF Download
+const downloadPDF = async () => {
+  const element = document.getElementById('pdf-content')
+  if (!element) return
+
+  const canvas = await html2canvas(element, { scale: 2 })
+  const imgData = canvas.toDataURL('image/png')
+  const pdf = new jsPDF('p', 'mm', 'a4')
+  const pageWidth = pdf.internal.pageSize.getWidth()
+  const pageHeight = pdf.internal.pageSize.getHeight()
+  const imgProps = pdf.getImageProperties(imgData)
+  const pdfWidth = pageWidth
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+
+  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+  pdf.save('appointments.pdf')
+}
+</script>
 
 <style scoped>
 .appointment-container {
+  margin-top: 80px;
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
@@ -289,5 +320,18 @@ const filteredAppointments = computed(() => appointments.value)
 }
 .doctor-info button:hover {
   background-color: #d62828;
+}
+.download-btn {
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  background-color: #2a6cd4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.download-btn:hover {
+  background-color: #1f4cb3;
 }
 </style>

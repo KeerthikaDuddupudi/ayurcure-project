@@ -34,11 +34,13 @@ const authRoutes = require("./routes/auth");
 const doctorRoutes = require("./routes/doctors");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const userRoutes = require("./routes/userRoutes"); 
 
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/users", userRoutes);
 
 // Socket.IO setup
 const io = new Server(server, {

@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 // 1. Book appointment, notify doctor
 exports.createAppointment = async (req, res) => {
   try {
-    const { name, email, phone, date, doctorId } = req.body;
+    const { name, email, phone, date, doctorId, concern } = req.body;
 
     console.log("📥 New appointment request received:", req.body);
 
@@ -30,6 +30,7 @@ exports.createAppointment = async (req, res) => {
       phone,
       date,
       doctorId,
+      concern, // ✅ include concern in DB
       status: "pending",
     });
 
@@ -54,6 +55,7 @@ exports.createAppointment = async (req, res) => {
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Concern:</strong> ${concern || "N/A"}</p>
         <p><strong>Date:</strong> ${new Date(date).toDateString()}</p>
         <p>Please select a time to confirm:</p>
         ${timeButtons}
@@ -100,6 +102,7 @@ exports.confirmAppointmentTime = async (req, res) => {
         <p>Your appointment with <strong>Dr. ${doctorName}</strong> is confirmed for <strong>${time}</strong> on <strong>${new Date(
         appointment.date
       ).toDateString()}</strong>.</p>
+        <p><strong>Your Concern:</strong> ${appointment.concern || "N/A"}</p>
       `,
     };
 
@@ -108,7 +111,7 @@ exports.confirmAppointmentTime = async (req, res) => {
 
     await Appointment.findByIdAndUpdate(appointmentId, {
       status: "confirmed",
-      timeOfDay: time, // ✅ match your schema field
+      timeOfDay: time,
     });
 
     await Notification.create({
@@ -148,6 +151,44 @@ exports.getAppointmentsByEmail = async (req, res) => {
     res.status(200).json(appointments);
   } catch (error) {
     console.error("❌ Error fetching appointments by email:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// 4. Cancel appointment
+exports.deleteAppointment = async (req, res) => {
+  try {
+    const appointmentId = req.params.id;
+
+    const appointment = await Appointment.findById(appointmentId).populate("doctorId");
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found." });
+    }
+
+    const doctor = appointment.doctorId;
+
+    const cancelMailOptions = {
+      from: process.env.EMAIL_USER,
+      to: doctor.email,
+      subject: `Appointment Cancelled by ${appointment.name}`,
+      html: `
+        <h2>Appointment Cancelled</h2>
+        <p><strong>Patient Name:</strong> ${appointment.name}</p>
+        <p><strong>Email:</strong> ${appointment.email}</p>
+        <p><strong>Concern:</strong> ${appointment.concern || "N/A"}</p>
+        <p>The appointment scheduled for <strong>${new Date(appointment.date).toDateString()}</strong> 
+        (${appointment.timeOfDay || "Not Set"}) has been cancelled by the patient.</p>
+      `,
+    };
+
+    await transporter.sendMail(cancelMailOptions);
+    console.log("📩 Cancellation email sent to doctor:", doctor.email);
+
+    await Appointment.findByIdAndDelete(appointmentId);
+
+    res.status(200).json({ message: "Appointment cancelled and doctor notified." });
+  } catch (error) {
+    console.error("❌ Error cancelling appointment:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };

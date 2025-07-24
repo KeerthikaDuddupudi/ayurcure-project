@@ -7,7 +7,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   gender: { type: String, enum: ["Male", "Female", "Other"], default: "" },
   dob: { type: Date, default: null },
-  
+
+  memberSince: { type: Date, default: Date.now },
+
+  image: { type: String, default: "" }, // 👈 profile image URL or path
 
   resetToken: String,
   resetTokenExpiry: Date

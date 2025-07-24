@@ -24,11 +24,11 @@
       <div class="info-table">
         <div class="row">
           <div class="label">{{ $t('profile.memberSince') }}</div>
-          <div class="value">{{ userData.memberSince || 'N/A' }}</div>
+          <div class="value">{{ formattedMemberSince }}</div>
         </div>
         <div class="row">
           <div class="label">{{ $t('profile.dob') }}</div>
-          <div class="value">{{ userData.dob || 'N/A' }}</div>
+          <div class="value">{{ formattedDob || 'N/A' }}</div>
         </div>
         <div class="row">
           <div class="label">{{ $t('profile.gender') }}</div>
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import defaultImage from '../assets/image.png'
 
 const imageUrl = ref(defaultImage)
@@ -102,6 +102,23 @@ if (storedUser) {
   }
 }
 
+// Format date like "July 23, 2025"
+function formatDate(dateStr) {
+  if (!dateStr) return 'N/A'
+  const date = new Date(dateStr)
+  return isNaN(date.getTime())
+    ? 'N/A'
+    : date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+}
+
+// Computed memberSince value for display
+const formattedMemberSince = computed(() => formatDate(userData.value.memberSince))
+const formattedDob = computed(() => formatDate(userData.value.dob))
+
 function handleImageUpload(event) {
   const file = event.target.files[0]
   if (file) {
@@ -117,27 +134,25 @@ function handleImageUpload(event) {
 
 <style>
 :root {
---dark-green: #1c3c2e;
---light-green: #b2f0c0;
---lightest-green:#dcf2e1;
---neon-green: #00e676;
---bg: #fefdfb;
---white: #ffffff;
---shadow: rgba(0, 0, 0, 0.06);
+  --dark-green: #1c3c2e;
+  --light-green: #b2f0c0;
+  --lightest-green: #dcf2e1;
+  --neon-green: #00e676;
+  --bg: #fefdfb;
+  --white: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.06);
 }
-/* Container */
 .profile-container {
-max-width: 960px;
-margin: 4rem auto;
-padding: 2.5rem;
-background: var(--lightest-green);
-border-radius: 20px;
-box-shadow: 0 12px 28px var(--shadow);
-font-family: 'Segoe UI', sans-serif;
-color: var(--dark-green);
-position: relative;
+  max-width: 960px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background: var(--lightest-green);
+  border-radius: 20px;
+  box-shadow: 0 12px 28px var(--shadow);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--dark-green);
+  position: relative;
 }
-/* Close button */
 .back-btn {
   position: absolute;
   top: -20px;
@@ -148,184 +163,166 @@ position: relative;
   font-size: 15.5px;
   font-weight: 600;
   padding: 8px 14px;
-  border-radius: 999px; /* pill style */
+  border-radius: 999px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
   transition: all 0.3s ease;
 }
-
 .back-btn::before {
   content: "←";
   font-size: 16px;
   display: inline-block;
 }
-
 .back-btn:hover {
   background-color: #a8e6cf;
   color: var(--dark-green);
   border-color: #00e676;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-
-/* Header */
 .profile-header {
-display: flex;
-align-items: center;
-gap: 2rem;
-margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 .profile-pic-wrapper {
-position: relative;
-width: 130px;
-height: 130px;
+  position: relative;
+  width: 130px;
+  height: 130px;
 }
 .profile-pic {
-width: 100%;
-height: 100%;
-object-fit: cover;
-border-radius: 50%;
-border: 4px solid var(--light-green);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--light-green);
 }
 .edit-icon {
-position: absolute;
-bottom: -5px;
-right: -5px;
-background: var(--neon-green);
-color: white;
-font-size: 18px;
-padding: 5px 9px;
-border-radius: 50%;
-border: 2px solid white;
-cursor: pointer;
-transition: 0.3s;
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: var(--neon-green);
+  color: white;
+  font-size: 18px;
+  padding: 5px 9px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: 0.3s;
 }
 .edit-icon:hover {
-background: var(--dark-green);
+  background: var(--dark-green);
 }
 .profile-details h2 {
-font-size: 26px;
-font-weight: bold;
-margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
 }
 .profile-details p {
-color: #555;
-margin-top: 6px;
+  color: #555;
+  margin-top: 6px;
 }
-/* Section Headings */
 .section h3 {
-font-size: 20px;
-margin-bottom: 1.5rem;
-font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
 }
-/* Personal Info */
 .personal-info {
-border-bottom: 1px solid #ddd;
-padding-bottom: 1.5rem;
-margin-bottom: 2rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 .info-table {
-display: grid;
-row-gap: 1rem;
-column-gap: 2rem;
-grid-template-columns: auto auto;
+  display: grid;
+  row-gap: 1rem;
+  column-gap: 2rem;
+  grid-template-columns: auto auto;
 }
 .row {
-display: contents;
+  display: contents;
 }
 .label {
-font-size: 16px;
-font-weight: 500;
-color: #555;
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
 }
 .value {
-font-size: 16px;
-font-weight: 600;
-color: #1a1a1a;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
 }
-/* Dashboard */
 .dashboard {
-display: flex;
-flex-wrap: wrap;
-gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 .dashboard-col {
-flex: 1;
-display: flex;
-flex-direction: column;
-gap: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-/* Cards */
 .card {
-background: var(--white);
-padding: 1rem 1.4rem;
-border-left: 5px solid var(--neon-green);
-border-radius: 14px;
-box-shadow: 0 6px 12px var(--shadow);
-display: flex;
-align-items: flex-start;
-gap: 1rem;
-font-size: 14.5px;
-cursor: pointer;
-transition: 0.2s;
+  background: var(--white);
+  padding: 1rem 1.4rem;
+  border-left: 5px solid var(--neon-green);
+  border-radius: 14px;
+  box-shadow: 0 6px 12px var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 .card:hover {
-transform: translateY(-4px);
-box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 .card .icon {
-font-size: 22px;
-margin-top: 3px;
+  font-size: 22px;
+  margin-top: 3px;
 }
 
 body.dark-theme .profile-container {
   background: #1e1e1e;
   color: #f5f5f5;
 }
-
 body.dark-theme .back-btn {
   color: #ffffff;
   border-color: #00e676;
 }
-
 body.dark-theme .back-btn:hover {
   background-color: #333;
   color: #a8e6cf;
   border-color: #00e676;
 }
-
 body.dark-theme .profile-details p {
   color: #ccc;
 }
-
 body.dark-theme .label {
   color: #cccccc;
 }
-
 body.dark-theme .value {
   color: #ffffff;
 }
-
 body.dark-theme .card {
   background: #2a2a2a;
   color: #f5f5f5;
   border-left-color: #00e676;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
-
 body.dark-theme .card:hover {
   background: #333333;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
 }
-
 body.dark-theme .edit-icon {
   background: #00e676;
   border-color: #2a2a2a;
 }
-
 body.dark-theme .section h3 {
   color: #f5f5f5;
 }
-
 </style>
