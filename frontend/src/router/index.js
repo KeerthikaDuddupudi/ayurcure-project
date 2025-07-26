@@ -13,6 +13,8 @@ import Notification from '../views/Notification.vue'
 import Saved from '../views/Saved.vue'
 import Schedule from '../views/Schedule.vue'
 import ResetPassword from '../components/ResetPassword.vue'
+import RemedyList from '../views/RemedyList.vue'
+import contact from '@/views/contact.vue'
 
 const routes = [
   {
@@ -46,9 +48,21 @@ const routes = [
     component: RemediesPage,
   },
   {
+
+path: '/remedieList', 
+name: 'RemedyList',
+component: RemedyList,
+},
+  
+  {
     path: '/doctors',
     name: 'Doctors',
     component: DoctorsPage,
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: contact,
   },
   {
     path: '/appointment',

@@ -1,5 +1,6 @@
 <template>
   <div class="auth-page">
+    <HomeNav />
     <div :class="['container', { 'right-panel-active': isSignUpActive }]">
       <!-- Sign Up Form -->
       <div class="form-container sign-up-container">
@@ -65,9 +66,12 @@
       </div>
     </div>
   </div>
+  
 </template>
 
 <script>
+import HomeNav from '@/components/HomeNav.vue';
+
 export default {
   name: 'Authentication',
   data() {

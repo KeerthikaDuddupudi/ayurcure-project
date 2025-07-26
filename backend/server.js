@@ -35,12 +35,18 @@ const doctorRoutes = require("./routes/doctors");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes"); 
+const remedyRoutes = require("./routes/remedyRoutes");
+const contactRoutes = require('./routes/contact');
+
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/remedies", remedyRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Socket.IO setup
 const io = new Server(server, {

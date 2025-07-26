@@ -74,6 +74,8 @@
           <li><router-link to="/home" @click="toggleMenu">🏠 {{ $t('navbar.home') }}</router-link></li>
           <li><router-link to="/remedies" @click="toggleMenu">🌿 {{ $t('navbar.remedies') }}</router-link></li>
           <li><router-link to="/doctors" @click="toggleMenu">👨‍⚕️ {{ $t('navbar.doctors') }}</router-link></li>
+      
+          <li><router-link to="/contact" @click="toggleMenu">📞 {{ $t('contact') }}</router-link></li>
         </ul>
       </aside>
     </transition>

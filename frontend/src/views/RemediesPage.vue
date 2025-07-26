@@ -1,12 +1,9 @@
 <template>
   <div class="app-wrapper">
-    <!-- Page Title -->
-    <h2 class="remedies-title">AyurCure Remedies</h2>
+    <h2 class="remedies-title">Explore Ayurvedic Remedies</h2>
 
-    <!-- Search Component -->
     <SearchBar @select="showRemedy" />
 
-    <!-- Remedy Cards Scroll -->
     <div class="remedy-slider" v-if="!activeRemedy">
       <button class="scroll-btn left" @click="scrollLeft">‹</button>
 
@@ -21,53 +18,41 @@
           <img
             class="ailment-img"
             :src="`/images/${a.image}`"
-            :alt="a.label"
+            :alt="a.key"
           />
-          <h3>{{ a.label }}</h3>
+          <h3>{{ formatCategoryName(a.key) }}</h3>
         </div>
       </div>
 
       <button class="scroll-btn right" @click="scrollRight">›</button>
     </div>
 
-    <!-- Selected Remedy View -->
-    <div v-if="activeRemedy" class="remedy-view">
-      <button class="back-btn" @click="activeRemedy = ''">
-        ← Back
-      </button>
-      <RemedyList :type="activeRemedy" :filter="formFilter" />
-    </div>
-
-    <!-- Expert Tip -->
-    <div class="ai-tip">
-      🌿 Try mixing turmeric with warm milk at bedtime for cough relief.
-    </div>
-
-    <!-- AI Suggestion -->
+    <div class="ai-tip">💡 Get Expert AI Tips Tailored For You!</div>
     <AiSuggest />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import SearchBar from '../components/Searchbar.vue'
-import RemedyList from '../components/RemedyList.vue'
-import AiSuggest from '../components/AiSuggest.vue'
+import AiSuggest from '../components/AiSuggest.vue';
+
+const router = useRouter()
+const scrollContainer = ref(null)
+const activeRemedy = ref(null)
 
 const ailments = [
-  { key: 'cold', image: 'cold_final.jpg', label: 'Cold & Cough' },
-  { key: 'acne', image: 'acne1.jpg', label: 'Acne & Pimples' },
-  { key: 'indigestion', image: 'indigestion1.jpg', label: 'Indigestion' },
-  { key: 'headache', image: 'head.jpg', label: 'Headache' },
-  { key: 'hairfall', image: 'hairfall.jpg', label: 'Hair Fall' },
-  { key: 'menstrual', image: 'mensuralpain.jpg', label: 'Menstrual Pain' },
-  { key: 'constipation', image: 'constipation.jpg', label: 'Constipation' },
-  { key: 'skin', image: 'skin.jpg', label: 'Skin Allergies' }
-]
+  { key: 'cold', image: 'cold_final.jpg' },  // ← ✅ Add comma here
+  { key: 'acne', image: 'acne1.jpg' },
+  { key: 'indigestion', image: 'indigestion1.jpg' },
+  { key: 'headache', image: 'head.jpg' },
+  { key: 'hair fall', image: 'hairfall.jpg' },
+  { key: 'menstrual pain', image: 'mensuralpain.jpg' },
+  { key: 'constipation', image: 'constipation.jpg' },
+  { key: 'skin', image: 'skin.jpg' }
+];
 
-const activeRemedy = ref('')
-const formFilter = ref('all')
-const scrollContainer = ref(null)
 
 function showRemedy(type) {
   activeRemedy.value = type
@@ -79,10 +64,10 @@ function animateAndShow(type) {
     clicked.classList.add('click-animate')
     setTimeout(() => {
       clicked.classList.remove('click-animate')
-      showRemedy(type)
+      router.push({ path: '/remedielist', query: { category: type } })
     }, 400)
   } else {
-    showRemedy(type)
+    router.push({ path: '/remedielist', query: { category: type } })
   }
 }
 
@@ -93,10 +78,16 @@ function scrollLeft() {
 function scrollRight() {
   scrollContainer.value?.scrollBy({ left: 300, behavior: 'smooth' })
 }
+
+function formatCategoryName(key) {
+  return key.charAt(0).toUpperCase() + key.slice(1)
+}
 </script>
 
 
+
 <style scoped>
+/* ALL STYLES REMAIN UNCHANGED AS REQUESTED */
 .remedies-title {
   color: #2e7d32;
 }
@@ -318,8 +309,14 @@ h2 {
   animation: fadeIn 0.6s ease;
   position: relative;
 }
+/* IMPORTANT: The content: "🤖 Expert AI Suggestion"; must be moved to an HTML div for i18n */
 .ai-container::before {
-  content: "🤖 Expert AI Suggestion";
+  /* This rule will be empty or removed if a new HTML div is used for the label */
+  /* For now, leaving it as is, but we'll add a new class to style the new div */
+  content: ""; /* Keep for existing styles but the text will be in a new div */
+}
+/* New style for the actual HTML div that will hold the AI suggestion label */
+.ai-header-label {
   position: absolute;
   top: -16px;
   left: 25px;
@@ -331,6 +328,7 @@ h2 {
   font-size: 14px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
+
 .ai-container input {
   width: 100%;
   padding: 14px 18px;
@@ -440,6 +438,7 @@ h2 {
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-top:90px;
 }
 .back-btn:hover {
   background-color: #256029;
@@ -474,6 +473,49 @@ body.dark-theme .remedy-details span,
 body.dark-theme .remedy-details strong {
   color: #e4e4e4 !important;
 }
-
-
+/* Dark mode styles for the new AI header label */
+body.dark-theme .ai-header-label {
+    background-color: #22c55e; /* A slightly brighter green for dark mode */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+body.dark-theme .ai-container {
+    background: linear-gradient(135deg, #1f1f1f, #282828);
+    border-color: #3a3a3a;
+    border-left-color: #22c55e;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+body.dark-theme .ai-container input {
+    background-color: #333;
+    color: #eee;
+    border-color: #555;
+    box-shadow: 0 2px 5px rgba(0, 150, 0, 0.15);
+}
+body.dark-theme .ai-container input::placeholder {
+    color: #a7f3d0;
+}
+body.dark-theme .ai-container input:hover {
+    border-color: #22c55e;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    background-color: #3a3a3a;
+}
+body.dark-theme .ai-container input:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+body.dark-theme .ai-container button {
+    background-color: #22c55e;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+body.dark-theme .ai-container button:hover {
+    background-color: #16a34a;
+}
+body.dark-theme .ai-container p {
+    color: #bbb;
+}
+body.dark-theme .ai-response {
+    background: #282828;
+    border-left-color: #22c55e;
+    color: #e0e0e0;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
 </style>

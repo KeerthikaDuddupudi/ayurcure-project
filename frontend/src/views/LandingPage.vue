@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HomeNav />
     <!-- Landing Page -->
     <div class="landing-page">
       <div class="content">
@@ -106,6 +107,7 @@
 
 
 <script setup>
+import HomeNav from '@/components/HomeNav.vue'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 

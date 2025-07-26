@@ -1,140 +1,59 @@
 <template>
   <div class="search-bar">
     <input
-      v-model="query"
-      @input="search"
-      :placeholder="typedPlaceholder"
-      @focus="stopTyping"
-      @blur="startTyping"
+      type="text"
+      v-model="searchTerm"
+      @keyup.enter="performSearch"
+      placeholder="Search by Category (e.g., Hair, Skin)"
+      class="search-input"
     />
-    <button @click="search" class="search-btn">🔍</button>
-    <button v-if="query" @click="clear" class="clear-btn">❌</button>
+    <button @click="performSearch" class="search-btn">Search</button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const emit = defineEmits(['select'])
-const query = ref('')
-const placeholderPhrases = [
-  'Search by ailment...',
-  'Try "cold", "acne", "headache"...',
-  'Looking for cough remedy?',
-  'Type your symptoms here...'
-]
+const searchTerm = ref('')
+const router = useRouter()
 
-let phraseIndex = 0
-let charIndex = 0
-let interval = null
-const typedPlaceholder = ref('')
-
-function typeWriter() {
-  const phrase = placeholderPhrases[phraseIndex]
-  if (charIndex <= phrase.length) {
-    typedPlaceholder.value = phrase.slice(0, charIndex++)
-  } else {
-    setTimeout(() => {
-      phraseIndex = (phraseIndex + 1) % placeholderPhrases.length
-      charIndex = 0
-    }, 1500)
+const performSearch = () => {
+  if (searchTerm.value.trim()) {
+    router.push({ path: '/remedielist', query: { category: searchTerm.value.trim() } })
   }
-}
-
-function startTyping() {
-  interval = setInterval(typeWriter, 120)
-}
-
-function stopTyping() {
-  clearInterval(interval)
-}
-
-onMounted(() => {
-  startTyping()
-})
-
-onBeforeUnmount(() => {
-  stopTyping()
-})
-
-const search = () => {
-  const lower = query.value.toLowerCase()
-  const keywords = {
-    cold: ['cold', 'cough'],
-    acne: ['acne', 'pimples'],
-    headache: ['headache'],
-    constipation: ['constipation']
-  }
-
-  for (const key in keywords) {
-    if (keywords[key].some(word => lower.includes(word))) {
-      emit('select', key)
-      return
-    }
-  }
-}
-
-function clear() {
-  query.value = ''
-  emit('select', '') // Optional: clears search
 }
 </script>
 
-<style>
+<style scoped>
 .search-bar {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 20px auto;
-  padding: 5px;
-  width: 90%;
-  max-width: 600px;
-  position: relative;
+  gap: 12px;
+  margin: 2rem 0;
+  flex-wrap: wrap;
 }
 
-.search-bar input {
-  flex: 1;
-  padding: 14px 20px;
-  font-size: 16px;
-  border: 2px solid #a5d6a7;
-  border-radius: 50px;
-  outline: none;
-  transition: all 0.3s ease;
-  background-color: #fafff5;
-  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.15);
-  font-style: italic;
+.search-input {
+  width: 60%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-.search-bar input:focus {
-  border-color: #388e3c;
-  box-shadow: 0 0 10px rgba(56, 142, 60, 0.3);
-  transform: scale(1.02);
-}
-
-.search-bar button {
-  border: none;
-  padding: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  border-radius: 50%;
-  background-color: #66bb6a;
+.search-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #4caf50;
   color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
-
-.search-bar .clear-btn {
-  background-color: #ef5350;
-}
-
-.search-bar button:hover {
-  transform: scale(1.1);
-}
-
-.search-bar input::placeholder {
-  color: #7cb342;
-  font-style: italic;
-  transition: all 0.3s ease;
+.search-btn:hover {
+  background-color: #388e3c;
 }
 </style>

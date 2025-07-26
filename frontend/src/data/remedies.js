@@ -1,3 +1,4 @@
+// src/data/remedies.js
 export default {
   cold: [
     {
@@ -8,7 +9,8 @@ export default {
       dosage: "Twice daily after meals",
       caution: "Avoid during pregnancy",
       form: "Tea",
-      image: "tulsitea.jpg"
+      image: "tulsitea.jpg",
+      i18nKey: "remedies.details.tulsiTea" // Added unique key for i18n lookup
     },
     {
       name: "Ginger Decoction",
@@ -18,7 +20,8 @@ export default {
       dosage: "Morning and evening",
       caution: "Avoid on empty stomach",
       form: "Tea",
-      image: "ginger.jpg"
+      image: "ginger.jpg",
+      i18nKey: "remedies.details.gingerDecoction"
     }
   ],
   acne: [
@@ -30,7 +33,8 @@ export default {
       dosage: "Once daily",
       caution: "Avoid open wounds",
       form: "Paste",
-      image: "neem.jpg"
+      image: "neem.jpg",
+      i18nKey: "remedies.details.neemPaste"
     },
     {
       name: "Multani Mitti Mask",
@@ -40,7 +44,8 @@ export default {
       dosage: "2-3 times a week",
       caution: "Avoid if skin is too dry",
       form: "Paste",
-      image: "multani.jpg"
+      image: "multani.jpg",
+      i18nKey: "remedies.details.multaniMittiMask"
     }
   ],
   indigestion: [
@@ -52,7 +57,8 @@ export default {
       dosage: "Twice a day after meals",
       caution: "Avoid excess during pregnancy",
       form: "Tea",
-      image: "jeera.jpg"
+      image: "jeera.jpg",
+      i18nKey: "remedies.details.jeeraWater"
     },
     {
       name: "Ajwain with Salt",
@@ -62,7 +68,8 @@ export default {
       dosage: "1/2 tsp as needed",
       caution: "Avoid in case of ulcers",
       form: "Paste",
-      image: "ajwain.jpg"
+      image: "ajwain.jpg",
+      i18nKey: "remedies.details.ajwainWithSalt"
     }
   ],
   headache: [
@@ -74,7 +81,8 @@ export default {
       dosage: "As needed",
       caution: "Avoid near eyes",
       form: "Oil",
-      image: "peppermint.jpg"
+      image: "peppermint.jpg",
+      i18nKey: "remedies.details.peppermintOilMassage"
     },
     {
       name: "Ginger Tea",
@@ -84,7 +92,8 @@ export default {
       dosage: "Twice daily",
       caution: "Avoid if prone to acidity",
       form: "Tea",
-      image: "ginger.jpg"
+      image: "ginger.jpg",
+      i18nKey: "remedies.details.gingerTea"
     }
   ],
   hairfall: [
@@ -96,7 +105,8 @@ export default {
       dosage: "2-3 times per week",
       caution: "Avoid if scalp is very dry",
       form: "Oil",
-      image: "amla.jpg"
+      image: "amla.jpg",
+      i18nKey: "remedies.details.amlaOilMassage"
     },
     {
       name: "Fenugreek Paste",
@@ -106,7 +116,8 @@ export default {
       dosage: "Once a week",
       caution: "Rinse thoroughly",
       form: "Paste",
-      image: "fenugreek.jpg"
+      image: "fenugreek.jpg",
+      i18nKey: "remedies.details.fenugreekPaste"
     }
   ],
   menstrual: [
@@ -118,7 +129,8 @@ export default {
       dosage: "1-2 times a day during periods",
       caution: "Avoid if on blood thinners",
       form: "Tea",
-      image: "cinnamon.jpg"
+      image: "cinnamon.jpg",
+      i18nKey: "remedies.details.cinnamonTea"
     },
     {
       name: "Ajwain Water",
@@ -128,7 +140,8 @@ export default {
       dosage: "Twice daily during cramps",
       caution: "Avoid excessive use",
       form: "Tea",
-      image: "ajwain.jpg"
+      image: "ajwain.jpg",
+      i18nKey: "remedies.details.ajwainWater"
     }
   ],
   constipation: [
@@ -140,7 +153,8 @@ export default {
       dosage: "Once daily",
       caution: "Consult for chronic issues",
       form: "Tea",
-      image: "triphala.jpg"
+      image: "triphala.jpg",
+      i18nKey: "remedies.details.triphalaPowder"
     },
     {
       name: "Flax Seeds",
@@ -150,7 +164,8 @@ export default {
       dosage: "Morning before food",
       caution: "Drink enough water",
       form: "Tea",
-      image: "flax.jpg"
+      image: "flax.jpg",
+      i18nKey: "remedies.details.flaxSeeds"
     }
   ],
   skin: [
@@ -162,7 +177,8 @@ export default {
       dosage: "2-3 times/week",
       caution: "May stain skin temporarily",
       form: "Paste",
-      image: "turmeric.jpg"
+      image: "turmeric.jpg",
+      i18nKey: "remedies.details.turmericPaste"
     },
     {
       name: "Aloe Vera Gel",
@@ -172,7 +188,8 @@ export default {
       dosage: "Daily use",
       caution: "Patch test for sensitive skin",
       form: "Gel",
-      image: "aloe.jpg"
-    }
-  ]
+      image: "aloe.jpg",
+      i18nKey: "remedies.details.aloeVeraGel"
+    }
+  ]
 }

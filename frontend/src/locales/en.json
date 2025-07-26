@@ -23,7 +23,7 @@
           "text": "Remedy cards with preparation methods (paste, tea, oil), dosage & instructions."
         },
         "consult": {
-          "title": "🧑‍⚕️ Online Ayurvedic Consultations",
+          "title": "🧑‍⚕ Online Ayurvedic Consultations",
           "text": "Chat or video consult with certified Ayurvedic doctors."
         },
         "bookmark": {
@@ -43,11 +43,11 @@
           "text": "Reminders sent to both primary and alternate numbers for family awareness."
         },
         "emergency": {
-          "title": "🚨 Emergency Contact Integration",
+          "title": "🆘 Emergency Contact Integration",
           "text": "Emergency button dials 108 instantly—essential for rural or elderly users."
         },
         "renewal": {
-          "title": "🗕️ Renewal Alerts with Color Coding",
+          "title": "📅 Renewal Alerts with Color Coding",
           "text": "Color-coded alerts: 🔴 Today, 🟠 3 Days, 🟢 1 Week+ for prescription renewals."
         }
       }
@@ -85,17 +85,17 @@
       }
     }
   },
-  "emergency": {
-    "sos": "🚨",
-    "title": "Emergency?",
-    "call": "Call 108 Now"
-  },
+    "emergency": {
+      "sos": "🆘",
+      "title": "Emergency?",
+      "call": "Call 108 Now"
+    },
   "forgot": {
     "title": "Reset Your Password",
     "placeholder": "Enter registered email",
     "send": "Send"
   },
-  "login": {
+   "login": {
     "newTo": "New to AyurCure? Register Now",
     "title": "Login",
     "emailPlaceholder": "Email",
@@ -113,11 +113,33 @@
   },
   "home": {
     "hero": {
-      "title": "AyurCure",
-      "subtitle": "Natural Healing Near You",
-      "button": "Explore Remedies"
-    },
+  "title": "AyurCure",
+  "subtitle": "Natural Healing Near You",
+  "button": "Explore Remedies"
+},
     "remedyHighlights": "Popular Natural Remedies",
+    "remedies": {
+      "lemonHoney": {
+        "name": "Lemon & Honey",
+        "desc": "Boosts immunity and soothes throat. A classic home remedy for colds and coughs, rich in Vitamin C and natural antibacterial properties."
+      },
+      "herbalMix": {
+        "name": "Herbal Mix",
+        "desc": "Traditional healing blend using various potent herbs for overall wellness. Supports natural bodily functions and promotes balance."
+      },
+      "neemLeaf": {
+        "name": "Neem Leaf",
+        "desc": "Fights bacteria and purifies blood. Known for its powerful antiseptic and detoxifying qualities, benefiting skin and internal health."
+      },
+      "aloeVera": {
+        "name": "Aloe Vera",
+        "desc": "Soothes skin and promotes healing. Ideal for burns, irritations, and internal digestive health due to its anti-inflammatory properties."
+      },
+      "goldenMilk": {
+        "name": "Golden Milk",
+        "desc": "Anti-inflammatory turmeric drink. A warming, nourishing beverage that supports joint health, digestion, and boosts immunity."
+      }
+    },
     "search": {
       "title": "Search for Remedies by Symptom",
       "placeholder": "e.g. Cough, Skin Allergy, Indigestion...",
@@ -167,31 +189,294 @@
       "call": "Call 108 Now"
     }
   },
+  "remedies": {
+    "pageTitle": "AyurCure Remedies",
+    "backButton": "← Back",
+    "expertTip": "🌿 Try mixing turmeric with warm milk at bedtime for cough relief.",
+    "ailments": {
+      "cold": {
+        "label": "Cold & Cough",
+        "eat": [
+          "Warm soups (chicken or vegetable)",
+          "Ginger honey tea",
+          "Citrus fruits like lemon, orange for Vitamin C",
+          "Steamed vegetables",
+          "Warm water with a pinch of black pepper"
+        ],
+        "avoid": [
+          "Cold beverages",
+          "Dairy products (can increase phlegm)",
+          "Fried foods",
+          "Sweet desserts",
+          "Processed foods"
+        ],
+        "benefits": "Ayurvedic remedies for cold and cough focus on boosting immunity, clearing respiratory passages, and reducing inflammation. Ingredients like ginger, honey, and turmeric are commonly used for their warming and antiseptic properties, helping to soothe sore throats and naturally alleviate congestion."
+      },
+      "acne": {
+        "label": "Acne",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "indigestion": {
+        "label": "Indigestion",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "headache": {
+        "label": "Headache",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "hairfall": {
+        "label": "Hairfall",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "menstrual": {
+        "label": "Menstrual Issues",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "constipation": {
+        "label": "Constipation",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      },
+      "skin": {
+        "label": "Skin Issues",
+        "eat": [],
+        "avoid": [],
+        "benefits": ""
+      }
+    },
+    "details": {
+      "plantLabel": "Plant:",
+      "partUsedLabel": "Part Used:",
+      "preparationLabel": "Preparation:",
+      "dosageLabel": "Dosage:",
+      "cautionLabel": "Caution:",
+      "saveRemedy": "📌 Save Remedy",
+      "unsaveRemedy": "❌ Unsave Remedy",
+      "unsaveRemedyText": "❌ Unbookmarked",
+      "saveRemedyText": "✅ Saved",
+
+      "tulsiTea": {
+        "name": "Tulsi Tea",
+        "plant": "Tulsi (Holy Basil)",
+        "part": "Leaves",
+        "preparation": "Boil 5 leaves in 1 cup water for 5 minutes. Add honey.",
+        "dosage": "Twice daily after meals",
+        "caution": "Avoid during pregnancy"
+      },
+      "gingerDecoction": {
+        "name": "Ginger Decoction",
+        "plant": "Ginger",
+        "part": "Root",
+        "preparation": "Boil crushed ginger in water for 10 minutes. Add jaggery or honey.",
+        "dosage": "Morning and evening",
+        "caution": "Avoid on empty stomach"
+      },
+      "neemPaste": {
+        "name": "Neem Paste",
+        "plant": "Neem",
+        "part": "Leaves",
+        "preparation": "Grind neem leaves and apply paste to affected area.",
+        "dosage": "Once daily",
+        "caution": "Avoid open wounds"
+      },
+      "multaniMittiMask": {
+        "name": "Multani Mitti Mask",
+        "plant": "Fuller's Earth",
+        "part": "Clay",
+        "preparation": "Mix with rose water and apply to face.",
+        "dosage": "2-3 times a week",
+        "caution": "Avoid if skin is too dry"
+      },
+      "jeeraWater": {
+        "name": "Jeera Water",
+        "plant": "Cumin",
+        "part": "Seeds",
+        "preparation": "Boil 1 tsp cumin seeds in 2 cups of water. Strain and drink.",
+        "dosage": "Twice a day after meals",
+        "caution": "Avoid excess during pregnancy"
+      },
+      "ajwainWithSalt": {
+        "name": "Ajwain with Salt",
+        "plant": "Carom Seeds",
+        "part": "Seeds",
+        "preparation": "Roast with black salt and chew with warm water.",
+        "dosage": "1/2 tsp as needed",
+        "caution": "Avoid in case of ulcers"
+      },
+      "peppermintOilMassage": {
+        "name": "Peppermint Oil Massage",
+        "plant": "Mint",
+        "part": "Oil",
+        "preparation": "Apply 1-2 drops on forehead and massage gently.",
+        "dosage": "As needed",
+        "caution": "Avoid near eyes"
+      },
+      "gingerTea": {
+        "name": "Ginger Tea",
+        "plant": "Ginger",
+        "part": "Root",
+        "preparation": "Boil with lemon and honey.",
+        "dosage": "Twice daily",
+        "caution": "Avoid if prone to acidity"
+      },
+      "amlaOilMassage": {
+        "name": "Amla Oil Massage",
+        "plant": "Indian Gooseberry",
+        "part": "Fruit",
+        "preparation": "Massage into scalp. Leave 1 hour, rinse.",
+        "dosage": "2-3 times per week",
+        "caution": "Avoid if scalp is very dry"
+      },
+      "fenugreekPaste": {
+        "name": "Fenugreek Paste",
+        "plant": "Fenugreek",
+        "part": "Seeds",
+        "preparation": "Soak overnight, grind, apply to scalp.",
+        "dosage": "Once a week",
+        "caution": "Rinse thoroughly"
+      },
+      "cinnamonTea": {
+        "name": "Cinnamon Tea",
+        "plant": "Cinnamon",
+        "part": "Bark",
+        "preparation": "Boil a small stick in water. Add honey.",
+        "dosage": "1-2 times a day during periods",
+        "caution": "Avoid if on blood thinners"
+      },
+      "ajwainWater": {
+        "name": "Ajwain Water",
+        "plant": "Carom Seeds",
+        "part": "Seeds",
+        "preparation": "Boil 1 tsp in water. Drink warm.",
+        "dosage": "Twice daily during cramps",
+        "caution": "Avoid excessive use"
+      },
+      "triphalaPowder": {
+        "name": "Triphala Powder",
+        "plant": "Triphala",
+        "part": "Fruits",
+        "preparation": "Mix 1 tsp in warm water before bed.",
+        "dosage": "Once daily",
+        "caution": "Consult for chronic issues"
+      },
+      "flaxSeeds": {
+        "name": "Flax Seeds",
+        "plant": "Flax",
+        "part": "Seeds",
+        "preparation": "Soak in warm water and drink.",
+        "dosage": "Morning before food",
+        "caution": "Drink enough water"
+      },
+      "turmericPaste": {
+        "name": "Turmeric Paste",
+        "plant": "Turmeric",
+        "part": "Root",
+        "preparation": "Mix with milk or aloe gel. Apply on skin.",
+        "dosage": "2-3 times/week",
+        "caution": "May stain skin temporarily"
+      },
+      "aloeVeraGel": {
+        "name": "Aloe Vera Gel",
+        "plant": "Aloe Vera",
+        "part": "Gel",
+        "preparation": "Apply to affected area.",
+        "dosage": "Daily use",
+        "caution": "Patch test for sensitive skin"
+      }
+    }
+  },
+  "auth": {
+    "joinAyurCureTitle": "Join AyurCure",
+    "signUpSubtitle": "Discover holistic remedies tailored for you.",
+    "fullNamePlaceholder": "Full Name",
+    "phoneNumberPlaceholder": "Phone Number",
+    "guardianPhonePlaceholder": "Guardian Phone",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "confirmPasswordPlaceholder": "Confirm Password",
+    "signUpButton": "Sign Up",
+    "loginAyurCureTitle": "Login to AyurCure",
+    "signInSubtitle": "Access your personalized Ayurvedic wellness dashboard.",
+    "forgotPasswordLink": "Forgot your password?",
+    "signInButton": "Sign In",
+    "resetPasswordTitle": "Reset Password",
+    "resetPasswordSubtitle": "We’ll send a recovery link to your email.",
+    "enterEmailPlaceholder": "Enter your email",
+    "resetButton": "Reset",
+    "backToLoginLink": "← Back to Login",
+    "welcomeBackTitle": "Welcome Back to AyurCure!",
+    "welcomeBackText": "Your path to natural wellness continues here.<br/>Please log in with your personal details.",
+    "welcomeToAyurCureTitle": "Welcome to AyurCure",
+    "welcomeToAyurCureText": "Your natural health companion awaits!<br/>Create your account and begin your healing journey today.",
+    "passwordsDoNotMatch": "Passwords do not match!",
+    "loginSuccessful": "Login successful",
+    "loginFailed": "Login failed",
+    "somethingWentWrong": "Something went wrong",
+    "registeredSuccessfully": "Registered successfully",
+    "registrationFailed": "Registration failed",
+    "pleaseEnterEmail": "Please enter your email.",
+    "userNotFound": "User not found.",
+    "resetLinkSent": "Reset link sent to your email.",
+    "networkError": "Network error. Please try again later."
+  },
+  
+  "Contact": "Contact",
+  "We are here to Help You.": "We are here to Help You.",
+  "Your name": "Your name",
+  "Your email": "Your email",
+  "Subject of your Message": "Subject of your Message",
+  "MESSAGE": "MESSAGE",
+  "SUBMIT": "SUBMIT",
+  "Our Details": "Our Details",
+  "contact": {
+    "addressLabel": "Address",
+    "address": "123 AyurCure Lane, Health City, Wellness State, 123456",
+    "emailLabel": "Email",
+    "email": "contact@ayurcure.com",
+    "phoneLabel": "Phone",
+    "phone": "+91 98765 43210",
+    "hoursLabel": "Working Hours",
+    "hours": "Mon - Fri: 9:00 AM - 6:00 PM",
+    "successMessage": "Message sent successfully!"
+  },
+  
   "doctors": {
     "title": "Our Doctors",
     "searchPlaceholder": "Search by symptom (e.g. acne, pcod)…",
     "bookButton": "Book Appointment",
     "specialization": "Specialization",
     "location": "Location",
-    "phone": "Phone"
-  },
-  "profile": {
-    "back": "Back",
-    "personalInfo": "Personal Information",
-    "memberSince": "Member Since",
-    "dob": "Date of Birth",
-    "gender": "Gender",
-    "genderMale": "Male",
     "phone": "Phone",
-    "notifications": "Notifications",
-    "newMessage": "You have 1 new message",
-    "schedule": "Appointment Schedule",
-    "nextAppointment": "Next: April 8, 2094",
-    "savedRemedies": "Saved Remedies",
-    "remediesSaved": "3 remedies saved",
-    "medicalHistory": "Medical History",
-    "medicalTip": "Ginger tea may help..."
+    "book": "Book Appointment"
   },
+"profile": {
+  "back": "Back",
+  "personalInfo": "Personal Information",
+  "memberSince": "Member Since",
+  "dob": "Date of Birth",
+  "gender": "Gender",
+  "genderMale": "Male",
+  "phone": "Phone",
+  "notifications": "Notifications",
+  "newMessage": "You have 1 new message",
+  "schedule": "Appointment Schedule",
+  "nextAppointment": "Next: April 8, 2094",
+  "savedRemedies": "Saved Remedies",
+  "remediesSaved": "3 remedies saved",
+  "medicalHistory": "Medical History",
+  "medicalTip": "Ginger tea may help..."
+},
   "notifications": {
     "title": "🔔 Notifications",
     "markAsRead": "Mark as Read",
@@ -215,38 +500,133 @@
     ]
   },
   "savedRemedies": {
-    "title": "💗 Saved Remedies",
-    "noRemedies": "No Saved Remedies Found!",
-    "removeTitle": "Remove",
-    "removeFromSaved": "Remove from Saved",
-    "remedy1": {
-      "title": "🌿 Tulsi + Honey Remedy",
-      "description": "Boost immunity with Tulsi and Honey every morning."
-    },
-    "remedy2": {
-      "title": "🍿 Turmeric Milk",
-      "description": "Great for cold & joint pain. Drink before sleep."
-    },
-    "remedy3": {
-      "title": "🍋 Lemon + Ginger Detox",
-      "description": "Improves digestion. Best taken on an empty stomach."
+  "title": "💗 Saved Remedies",
+  "noRemedies": "No Saved Remedies Found!",
+  "removeTitle": "Remove",
+  "removeFromSaved": "Remove from Saved",
+  "remedy1": {
+    "title": "🌿 Tulsi + Honey Remedy",
+    "description": "Boost immunity with Tulsi and Honey every morning."
+  },
+  "remedy2": {
+    "title": "🍯 Turmeric Milk",
+    "description": "Great for cold & joint pain. Drink before sleep."
+  },
+  "remedy3": {
+    "title": "🍋 Lemon + Ginger Detox",
+    "description": "Improves digestion. Best taken on an empty stomach."
+  }
+},
+
+  "dietPlans": {
+    "title": "AyurCure Diet Plans",
+    "cardImageAlt": "{name} condition image",
+    "backButton": "Back",
+    "dietPlanSuffix": "Diet Plan",
+    "whatToEat": "What to Eat",
+    "whatToAvoid": "What to Avoid",
+    "benefits": "Benefits",
+    "conditions": {
+      "diabetes": {
+        "name": "DIABETES",
+        "eat": [
+          "Whole grains",
+          "Leafy greens",
+          "Lentils"
+        ],
+        "avoid": [
+          "Sugar",
+          "White bread",
+          "Processed foods"
+        ],
+        "benefits": "Helps regulate blood sugar and prevents insulin spikes."
+      },
+      "pcod": {
+        "name": "PCOD",
+        "eat": [
+          "Fiber-rich veggies",
+          "Lean protein",
+          "Omega-3 foods"
+        ],
+        "avoid": [
+          "Refined carbs",
+          "Sugar",
+          "Fried foods"
+        ],
+        "benefits": "Balances hormones and supports healthy weight."
+      },
+      "pcos": {
+        "name": "PCOS",
+        "eat": [
+          "Low GI foods",
+          "Anti-inflammatory greens",
+          "Nuts"
+        ],
+        "avoid": [
+          "Dairy",
+          "Sugar",
+          "White rice"
+        ],
+        "benefits": "Regulates periods and reduces inflammation."
+      },
+      "constipation": {
+        "name": "CONSTIPATION",
+        "eat": [
+          "Papaya",
+          "Oats",
+          "Leafy vegetables",
+          "Water"
+        ],
+        "avoid": [
+          "Dairy",
+          "Red meat",
+          "Processed snacks"
+        ],
+        "benefits": "Improves digestion and regularizes bowel movements."
+      },
+      "weightLoss": {
+        "name": "WEIGHT LOSS",
+        "eat": [
+          "Salads",
+          "Green tea",
+          "Lean meat",
+          "Millets"
+        ],
+        "avoid": [
+          "Sweets",
+          "Soft drinks",
+          "Junk food"
+        ],
+        "benefits": "Burns fat and improves metabolism."
+      },
+      "bp": {
+        "name": "BP",
+        "eat": [
+          "Bananas",
+          "Low-sodium foods",
+          "Beetroot",
+          "Oats"
+        ],
+        "avoid": [
+          "Salt",
+          "Pickles",
+          "Canned foods"
+        ],
+        "benefits": "Controls blood pressure and supports heart health."
+      }
     }
   },
   "appointment": {
-    "title": "Book Appointment",
-    "fullName": "Full Name",
-    "age": "Age",
-    "gender": "Gender",
-    "selectGender": "Select Gender",
-    "male": "Male",
-    "female": "Female",
-    "other": "Other",
-    "contact": "Contact Number",
-    "email": "Email",
-    "date": "Preferred Date & Time",
-    "doctor": "Doctor's Name",
-    "concern": "Health Concern",
-    "book": "Book Appointment"
+    "mainTitle": "Appointment Schedule",
+    "selectDate": "Select Date",
+    "morningSlotsTitle": "🌞 Morning (9:00 AM - 12:00 PM)",
+    "eveningSlotsTitle": "🌙 Evening (5:00 PM - 9:00 PM)",
+    "appointmentsForDate": "Appointments for {date}",
+    "phoneLabel": "Phone:",
+    "symptomsLabel": "Symptoms:",
+    "timeLabel": "Time:",
+    "cancelButton": "Cancel",
+    "cancelAlert": "Appointment with Doctor ID {id} has been canceled."
   },
   "footer": {
     "brandTitle": "AyurCure",
@@ -272,5 +652,5 @@
       "email": "ayurcure.help@gmail.com"
     },
     "copyright": "AyurCure. All rights reserved."
-  }
+}
 }
