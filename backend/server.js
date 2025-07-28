@@ -37,6 +37,7 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const userRoutes = require("./routes/userRoutes"); 
 const remedyRoutes = require("./routes/remedyRoutes");
 const contactRoutes = require('./routes/contact');
+const savedRemedyRoutes = require('./routes/savedRemedyRoutes');
 
 
 
@@ -47,6 +48,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/remedies", remedyRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/saved", savedRemedyRoutes);
 
 // Socket.IO setup
 const io = new Server(server, {

@@ -462,6 +462,7 @@
   },
 "profile": {
   "back": "Back",
+  "signOut": "Sign Out →",
   "personalInfo": "Personal Information",
   "memberSince": "Member Since",
   "dob": "Date of Birth",

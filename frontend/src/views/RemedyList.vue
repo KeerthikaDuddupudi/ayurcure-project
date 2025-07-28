@@ -26,7 +26,7 @@
             <span class="property-label">Part Used:</span>
             <span class="property-value">{{ remedy.partUsed }}</span>
           </div>
-          <div v-if="remedy.ingredients" class="remedy-property">
+          <div v-if="remedy.ingredients?.length" class="remedy-property">
             <span class="property-label">Ingredients:</span>
             <ul class="property-list">
               <li v-for="(item, i) in remedy.ingredients" :key="i">{{ item }}</li>
@@ -52,7 +52,7 @@
             <span class="property-label">Subcategory:</span>
             <span class="property-value">{{ remedy.subcategory }}</span>
           </div>
-          <div v-if="remedy.benefits" class="remedy-property">
+          <div v-if="remedy.benefits?.length" class="remedy-property">
             <span class="property-label">Benefits:</span>
             <ul class="property-list">
               <li v-for="(point, i) in remedy.benefits" :key="i">{{ point }}</li>
@@ -78,9 +78,7 @@
             </div>
           </div>
         </div>
-        <button @click="saveCurrentRemedy(remedy)" class="save-btn">
-          Save Remedy
-        </button>
+        <button @click="saveCurrentRemedy(remedy)" class="save-btn">Save Remedy</button>
       </div>
     </div>
 
@@ -89,19 +87,29 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSavedRemedies } from '@/composables/savedRemedies'
 
-const { saveRemedy } = useSavedRemedies()
 const route = useRoute()
 const searchTerm = ref(route.query.category || '')
 const remedies = ref([])
 const loading = ref(false)
 
-const saveCurrentRemedy = (remedy) => {
-  saveRemedy(remedy)
-}
+const { saveRemedy } = useSavedRemedies()
+
+const saveCurrentRemedy = async (remedy) => {
+  const confirmSave = window.confirm("Do you want to save this remedy?");
+  if (!confirmSave) return;
+
+  try {
+    await saveRemedy(remedy);
+    alert("✅ Remedy saved successfully!");
+  } catch (err) {
+    console.error("❌ Error saving remedy:", err.message);
+    alert("❌ Failed to save remedy. Please check the console for more details.");
+  }
+};
 
 const fetchRemedies = async () => {
   if (!searchTerm.value.trim()) return
@@ -110,30 +118,26 @@ const fetchRemedies = async () => {
   remedies.value = []
 
   try {
-  const res = await fetch(`http://localhost:5000/api/remedies?category=${encodeURIComponent(searchTerm.value)}`)
+    const res = await fetch(`http://localhost:5000/api/remedies?category=${encodeURIComponent(searchTerm.value)}`)
+    const data = await res.json()
 
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`)
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to fetch remedies')
+    }
+
+    remedies.value = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
+  } catch (err) {
+    console.error('Error fetching remedies:', err.message)
+    remedies.value = []
+  } finally {
+    loading.value = false
   }
-
-  const result = await res.json()
-
-  // If result has a `data` key and it's an array, use it. Otherwise, assume result is the array.
-  remedies.value = Array.isArray(result?.data) ? result.data : result
-} catch (err) {
-  console.error('Error fetching remedies:', err)
-  remedies.value = []
-} finally {
-  loading.value = false
-}
 }
 
-// Fetch remedies on load
 onMounted(() => {
   fetchRemedies()
 })
 
-// React to changes in route category
 watch(
   () => route.query.category,
   (newCategory) => {

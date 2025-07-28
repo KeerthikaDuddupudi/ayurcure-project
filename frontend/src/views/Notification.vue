@@ -5,21 +5,21 @@
 
       <div class="notify-grid">
         <div
-          v-for="(notif, index) in notifications"
+          v-for="(notif, index) in enhancedNotifications"
           :key="notif._id"
           class="notify-card"
         >
           <div class="notify-image-wrapper">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png"
-              alt="Notification"
+              :src="notif.image"
+              :alt="notif.title"
               class="notify-image"
             />
             <button @click="removeNotification(index)" class="notify-close">✖</button>
           </div>
           <div class="notify-content">
-            <p class="notify-time">{{ formatTime(notif.createdAt || notif.date || notif.time) }}</p>
-            <h2 class="notify-heading">New Update</h2>
+            <p class="notify-time">{{ formatTime(notif.createdAt) }}</p>
+            <h2 class="notify-heading">{{ notif.emoji }} {{ notif.title }}</h2>
             <p class="notify-desc">{{ notif.message }}</p>
             <button class="notify-read">Mark as Read</button>
           </div>
@@ -34,13 +34,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import axios from 'axios'
 
 const notifications = ref([])
 const email = localStorage.getItem('userEmail')
-
 let interval = null
+
+// Enhance notification with emoji/title/image
+const enhanceNotification = (notif) => {
+  let title = 'New Update'
+  let emoji = '🔔'
+  let image = 'https://cdn-icons-png.flaticon.com/512/4086/4086679.png'
+
+  if (notif.message.includes('remedy')) {
+    title = 'Remedy Saved'
+    emoji = '🧴'
+    image = 'https://cdn-icons-png.flaticon.com/512/2965/2965567.png'
+  } else if (notif.message.includes('appointment')) {
+    title = 'Appointment Booked'
+    emoji = '📅'
+    image = 'https://cdn-icons-png.flaticon.com/512/1087/1087929.png'
+  } else if (notif.message.includes('cancel')) {
+    title = 'Cancelled'
+    emoji = '❌'
+    image = 'https://cdn-icons-png.flaticon.com/512/753/753345.png'
+  }
+
+  return { ...notif, title, emoji, image }
+}
+
+const enhancedNotifications = computed(() => {
+  return [...notifications.value].reverse().map(enhanceNotification)
+
+})
 
 const fetchNotifications = async () => {
   if (!email) {
@@ -49,18 +76,26 @@ const fetchNotifications = async () => {
   }
 
   try {
-    console.log("📧 Fetching notifications for email:", email)
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications/${email}`)
     notifications.value = res.data
-    console.log("✅ Fetched notifications:", res.data)
   } catch (err) {
     console.error("❌ Error fetching notifications", err)
   }
 }
 
-const removeNotification = (index) => {
-  notifications.value.splice(index, 1)
+const removeNotification = async (index) => {
+  const notificationToDelete = notifications.value[index]
+  if (!notificationToDelete || !notificationToDelete._id) return
+
+  try {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/notifications/${notificationToDelete._id}`)
+    notifications.value.splice(index, 1) // remove from frontend list
+  } catch (error) {
+    console.error("❌ Failed to delete notification:", error)
+    alert("Failed to delete notification from server.")
+  }
 }
+
 
 const formatTime = (time) => {
   if (!time) return 'N/A'

@@ -1,6 +1,5 @@
 <template>
   <div class="auth-page">
-    <HomeNav />
     <div :class="['container', { 'right-panel-active': isSignUpActive }]">
       <!-- Sign Up Form -->
       <div class="form-container sign-up-container">
@@ -70,6 +69,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import HomeNav from '@/components/HomeNav.vue';
 
 export default {
@@ -129,97 +129,70 @@ export default {
       };
       this.reset = { email: '' };
     },
-   async handleSignUp() {
-  if (this.signUp.password !== this.signUp.confirmPassword) {
-    this.message = "Passwords do not match!";
-    this.messageColor = 'red';
-    return;
-  }
 
-  this.loading = true;
-  try {
-    const payload = {
-      name: this.signUp.name,
-      phone: this.signUp.phone,
-      email: this.signUp.email,
-      password: this.signUp.password,
-      gender: this.signUp.gender,
-      dob: this.signUp.dob,
-    };
-    console.log("🚀 Sending signup payload:", payload);
+    async handleSignUp() {
+      if (this.signUp.password !== this.signUp.confirmPassword) {
+        this.message = "Passwords do not match!";
+        this.messageColor = 'red';
+        return;
+      }
 
-    const res = await fetch('http://localhost:5000/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      this.message = data.message || 'Signup failed';
-      this.messageColor = 'red';
-    } else {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('userEmail', data.user.email);
-      this.$router.push('/home');
-    }
-  } catch {
-    this.message = 'Server error. Please try again.';
-    this.messageColor = 'red';
-  } finally {
-    this.loading = false;
-  }
-},
-    async handleLogin() {
       this.loading = true;
       try {
-        const res = await fetch('http://localhost:5000/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.login)
-        });
-        const data = await res.json();
+        const payload = {
+          name: this.signUp.name,
+          phone: this.signUp.phone,
+          email: this.signUp.email,
+          password: this.signUp.password,
+          gender: this.signUp.gender,
+          dob: this.signUp.dob,
+        };
 
-        if (!res.ok) {
-          this.message = data.message || 'Login failed';
-          this.messageColor = 'red';
-        } else {
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          localStorage.setItem('userEmail', data.user.email);
-          this.$router.push('/home');
-        }
-      } catch {
-        this.message = 'Login failed. Server not responding.';
+        const { data } = await axios.post('http://localhost:5000/api/auth/signup', payload);
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userEmail', data.user.email);
+        this.$router.push('/home');
+      } catch (err) {
+        this.message = err.response?.data?.message || 'Signup failed.';
         this.messageColor = 'red';
       } finally {
         this.loading = false;
       }
     },
+
+    async handleLogin() {
+      this.loading = true;
+      try {
+        const { data } = await axios.post('http://localhost:5000/api/auth/login', this.login);
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userEmail', data.user.email);
+        this.$router.push('/home');
+      } catch (err) {
+        this.message = err.response?.data?.message || 'Login failed.';
+        this.messageColor = 'red';
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async handleReset() {
       this.loading = true;
       try {
-        const res = await fetch('http://localhost:5000/api/auth/reset-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.reset)
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          this.message = data.message || 'Reset failed';
-          this.messageColor = 'red';
-        } else {
-          this.message = 'Recovery link sent to your email.';
-          this.messageColor = 'green';
-          this.reset.email = '';
-          setTimeout(() => {
-            this.showForgotPassword = false;
-          }, 3000);
-        }
-      } catch {
-        this.message = 'Server error. Try again later.';
+        const { data } = await axios.post('http://localhost:5000/api/auth/reset-password', this.reset);
+
+        this.message = data.message || 'Recovery link sent to your email.';
+        this.messageColor = 'green';
+        this.reset.email = '';
+
+        setTimeout(() => {
+          this.showForgotPassword = false;
+        }, 3000);
+      } catch (err) {
+        this.message = err.response?.data?.message || 'Reset failed.';
         this.messageColor = 'red';
       } finally {
         this.loading = false;
@@ -228,6 +201,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');

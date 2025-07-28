@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- NAVBAR -->
     <nav class="navbar">
       <div class="navbar-left">
         <button class="menu-btn" @click="toggleMenu">☰</button>
@@ -12,7 +13,7 @@
         <ThemeToggle />
         <LanguageSelectors />
 
-        <!-- 🔔 Notifications Dropdown -->
+        <!-- 🔔 Notifications -->
         <div class="dropdown-wrapper">
           <button class="icon-btn" @click="toggleNotifications" title="Notifications">
             🔔
@@ -23,20 +24,15 @@
             <div class="notif-header">
               <h3 class="dropdown-title">Notifications</h3>
               <div>
-                <button @click="fetchNotifications" class="refresh-btn" title="Refresh">🔁</button>
+                <button @click="fetchNotifications" class="refresh-btn">🔁</button>
                 <button class="close-notif-btn" @click="showNotifications = false">✕</button>
               </div>
             </div>
 
             <div class="notif-scroll">
-              <div
-                v-for="(notif, index) in notifications"
-                :key="index"
-                class="notif-card"
-              >
+              <div v-for="(notif, index) in notifications" :key="index" class="notif-card">
                 <div class="notif-time">{{ notif.time }}</div>
-                <div class="notif-icon">✉️</div>
-
+                <div class="notif-icon">{{ notif.icon }}</div>
                 <h4 class="notif-title">{{ notif.title }}</h4>
                 <p class="notif-desc">{{ notif.description }}</p>
                 <a :href="notif.link" class="notif-cta">{{ notif.cta }}</a>
@@ -48,7 +44,7 @@
           </div>
         </div>
 
-        <!-- 👤 Profile Dropdown -->
+        <!-- 👤 Profile -->
         <div class="dropdown-wrapper profile-wrapper">
           <img
             class="profile-avatar"
@@ -63,7 +59,7 @@
       </div>
     </nav>
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <transition name="slide-left">
       <aside class="sidebar" v-if="isOpen">
         <div class="sidebar-header">
@@ -74,7 +70,6 @@
           <li><router-link to="/home" @click="toggleMenu">🏠 {{ $t('navbar.home') }}</router-link></li>
           <li><router-link to="/remedies" @click="toggleMenu">🌿 {{ $t('navbar.remedies') }}</router-link></li>
           <li><router-link to="/doctors" @click="toggleMenu">👨‍⚕️ {{ $t('navbar.doctors') }}</router-link></li>
-      
           <li><router-link to="/contact" @click="toggleMenu">📞 {{ $t('contact') }}</router-link></li>
         </ul>
       </aside>
@@ -91,11 +86,7 @@ import UserProfile from '../views/Dashboard.vue'
 
 export default {
   name: 'NavBar',
-  components: {
-    ThemeToggle,
-    LanguageSelectors,
-    UserProfile
-  },
+  components: { ThemeToggle, LanguageSelectors, UserProfile },
   setup() {
     const isOpen = ref(false)
     const showNotifications = ref(false)
@@ -105,22 +96,50 @@ export default {
     const notifications = ref([])
     const unreadCount = ref(0)
 
+    // Function to customize notification look
+    const enhanceNotification = (notif) => {
+      let icon = '🔔'
+      let title = 'Notification'
+      let link = '/'
+      let cta = 'View Details'
+
+      const message = notif.message.toLowerCase()
+
+      if (message.includes('remedy')) {
+        icon = '🌿'
+        title = 'New Remedy Saved'
+        link = '/saved-remedies'
+        cta = 'View Remedy'
+      } else if (message.includes('appointment')) {
+        icon = '📅'
+        title = 'Appointment Reminder'
+        link = '/appointments'
+        cta = 'View Appointment'
+      } else if (message.includes('cancel')) {
+        icon = '❌'
+        title = 'Appointment Cancelled'
+        link = '/appointments'
+        cta = 'View Cancellation'
+      }
+
+      return {
+        icon,
+        time: new Date(notif.createdAt).toLocaleString(),
+        title,
+        description: notif.message,
+        link,
+        cta
+      }
+    }
+
+    // Fetch notifications from backend
     const fetchNotifications = async () => {
       const email = localStorage.getItem('userEmail')
       if (!email) return
 
       try {
         const res = await axios.get(`http://localhost:5000/api/notifications/${email}`)
-        const data = res.data
-
-        notifications.value = data.map(n => ({
-          image: 'https://via.placeholder.com/400x200',
-          time: n.timeRelative || new Date(n.createdAt).toLocaleString(),
-          title: n.title || 'Appointment Notification',
-          description: n.message || 'You have an upcoming appointment',
-          cta: 'View Appointment',
-           link: n.link || '/appointments'
-        }))
+        notifications.value = [...res.data].reverse().map(enhanceNotification)
 
         unreadCount.value = notifications.value.length
       } catch (err) {
@@ -132,6 +151,17 @@ export default {
       profileImage.value = localStorage.getItem('profileImage')
     }
 
+    const toggleMenu = () => isOpen.value = !isOpen.value
+    const toggleNotifications = () => {
+      showNotifications.value = !showNotifications.value
+      showProfile.value = false
+      if (showNotifications.value) fetchNotifications()
+    }
+    const toggleProfile = () => {
+      showProfile.value = !showProfile.value
+      showNotifications.value = false
+    }
+
     onMounted(() => {
       window.addEventListener('storage', syncProfileImage)
     })
@@ -139,21 +169,6 @@ export default {
     onBeforeUnmount(() => {
       window.removeEventListener('storage', syncProfileImage)
     })
-
-    const toggleMenu = () => {
-      isOpen.value = !isOpen.value
-    }
-
-    const toggleNotifications = () => {
-      showNotifications.value = !showNotifications.value
-      showProfile.value = false
-      if (showNotifications.value) fetchNotifications()
-    }
-
-    const toggleProfile = () => {
-      showProfile.value = !showProfile.value
-      showNotifications.value = false
-    }
 
     return {
       isOpen,
@@ -171,6 +186,9 @@ export default {
   }
 }
 </script>
+
+
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');

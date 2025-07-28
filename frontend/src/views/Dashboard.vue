@@ -1,9 +1,14 @@
 <template>
   <div class="profile-container">
-    <!-- Back Button -->
-    <button class="back-btn" @click="$emit('close')">
-      {{ $t('profile.back') }}
-    </button>
+    <!-- Top Controls: Back + Sign Out -->
+    <div class="top-controls">
+      <button class="back-btn" @click="$emit('close')">
+        {{ $t('profile.back') }}
+      </button>
+      <button class="signout-btn" @click="signOut">
+        {{ $t('profile.signOut') || 'Sign Out' }}
+      </button>
+    </div>
 
     <!-- Profile Header -->
     <div class="profile-header">
@@ -115,7 +120,7 @@ function formatDate(dateStr) {
       })
 }
 
-// Computed memberSince value for display
+// Computed values
 const formattedMemberSince = computed(() => formatDate(userData.value.memberSince))
 const formattedDob = computed(() => formatDate(userData.value.dob))
 
@@ -128,6 +133,14 @@ function handleImageUpload(event) {
       localStorage.setItem('profileImage', reader.result)
     }
     reader.readAsDataURL(file)
+  }
+}
+
+function signOut() {
+  if (confirm("Are you sure you want to sign out?")) {
+    localStorage.removeItem('user')
+    localStorage.removeItem('profileImage')
+    window.location.href = '/' // redirect to landing page
   }
 }
 </script>
@@ -153,10 +166,15 @@ function handleImageUpload(event) {
   color: var(--dark-green);
   position: relative;
 }
-.back-btn {
-  position: absolute;
-  top: -20px;
-  left: 0;
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.back-btn,
+.signout-btn {
+  margin-top: -60px;
   background: transparent;
   color: var(--dark-green);
   border: 2px solid transparent;
@@ -165,20 +183,25 @@ function handleImageUpload(event) {
   padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
   transition: all 0.3s ease;
+
 }
 .back-btn::before {
   content: "←";
   font-size: 16px;
   display: inline-block;
+  margin-right: 6px;
 }
 .back-btn:hover {
   background-color: #a8e6cf;
   color: var(--dark-green);
   border-color: #00e676;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.signout-btn:hover {
+  background-color: #ffdddd;
+  color: #d32f2f;
+  border-color: #f44336;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 .profile-header {
@@ -290,11 +313,13 @@ body.dark-theme .profile-container {
   background: #1e1e1e;
   color: #f5f5f5;
 }
-body.dark-theme .back-btn {
+body.dark-theme .back-btn,
+body.dark-theme .signout-btn {
   color: #ffffff;
   border-color: #00e676;
 }
-body.dark-theme .back-btn:hover {
+body.dark-theme .back-btn:hover,
+body.dark-theme .signout-btn:hover {
   background-color: #333;
   color: #a8e6cf;
   border-color: #00e676;
