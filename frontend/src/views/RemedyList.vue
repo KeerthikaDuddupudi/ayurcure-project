@@ -1,143 +1,151 @@
 <template>
   <div class="remedy-list">
-    <h1 class="page-title">AyurCure Remedies</h1>
+    <h1 class="page-title">{{ $t('remediesList.pageTitle') }}</h1>
 
     <div class="search-container">
       <input
         type="text"
         v-model="searchTerm"
         @keyup.enter="fetchRemedies"
-        placeholder="Search by Category (e.g., Hair, Skin)"
+        :placeholder="$t('remediesList.searchPlaceholder')"
         class="search-input"
       />
-      <button @click="fetchRemedies" class="search-btn">Search</button>
+      <button @click="fetchRemedies" class="search-btn">{{ $t('remediesList.searchButton') }}</button>
     </div>
 
-    <div v-if="loading" class="no-results">Loading remedies...</div>
-    <div v-else-if="remedies.length" class="card-grid">
+    <div v-if="remedies.length" class="card-grid">
       <div v-for="(remedy, index) in remedies" :key="index" class="remedy-card">
         <h3 class="remedy-title">{{ remedy.title }}</h3>
         <div class="remedy-content">
           <div class="remedy-property">
-            <span class="property-label">Plant:</span>
+            <span class="property-label">{{ $t('remediesList.plant') }}:</span>
             <span class="property-value">{{ remedy.plant }}</span>
           </div>
+
           <div class="remedy-property">
-            <span class="property-label">Part Used:</span>
+            <span class="property-label">{{ $t('remediesList.partUsed') }}:</span>
             <span class="property-value">{{ remedy.partUsed }}</span>
           </div>
-          <div v-if="remedy.ingredients?.length" class="remedy-property">
-            <span class="property-label">Ingredients:</span>
+
+          <div v-if="remedy.ingredients" class="remedy-property">
+            <span class="property-label">{{ $t('remediesList.ingredients') }}:</span>
             <ul class="property-list">
               <li v-for="(item, i) in remedy.ingredients" :key="i">{{ item }}</li>
             </ul>
           </div>
+
           <div class="remedy-property">
-            <span class="property-label">Preparation:</span>
+            <span class="property-label">{{ $t('remediesList.preparation') }}:</span>
             <div class="preparation-text">{{ remedy.preparation }}</div>
           </div>
+
           <div class="remedy-property">
-            <span class="property-label">Dosage:</span>
+            <span class="property-label">{{ $t('remediesList.dosage') }}:</span>
             <span class="property-value">{{ remedy.dosage }}</span>
           </div>
+
           <div v-if="remedy.caution" class="remedy-property caution">
-            <span class="property-label">Caution:</span>
+            <span class="property-label">{{ $t('remediesList.caution') }}:</span>
             <span class="property-value">{{ remedy.caution }}</span>
           </div>
+
           <div v-if="remedy.note" class="remedy-property note">
-            <span class="property-label">Note:</span>
+            <span class="property-label">{{ $t('remediesList.note') }}:</span>
             <span class="property-value">{{ remedy.note }}</span>
           </div>
+
           <div v-if="remedy.subcategory" class="remedy-property">
-            <span class="property-label">Subcategory:</span>
+            <span class="property-label">{{ $t('remediesList.subcategory') }}:</span>
             <span class="property-value">{{ remedy.subcategory }}</span>
           </div>
-          <div v-if="remedy.benefits?.length" class="remedy-property">
-            <span class="property-label">Benefits:</span>
+
+          <div v-if="remedy.benefits" class="remedy-property">
+            <span class="property-label">{{ $t('remediesList.benefits') }}:</span>
             <ul class="property-list">
               <li v-for="(point, i) in remedy.benefits" :key="i">{{ point }}</li>
             </ul>
           </div>
+
           <div v-if="remedy.bestRemedy" class="best-remedy">
-            <h4 class="best-remedy-title">Best Remedy</h4>
+            <h4 class="best-remedy-title">{{ $t('remediesList.bestRemedy') }}</h4>
             <div class="remedy-property">
-              <span class="property-label">Title:</span>
+              <span class="property-label">{{ $t('remediesList.title') }}:</span>
               <span class="property-value">{{ remedy.bestRemedy.title }}</span>
             </div>
             <div class="remedy-property">
-              <span class="property-label">Preparation:</span>
+              <span class="property-label">{{ $t('remediesList.preparation') }}:</span>
               <div class="preparation-text">{{ remedy.bestRemedy.preparation }}</div>
             </div>
             <div class="remedy-property">
-              <span class="property-label">Usage:</span>
+              <span class="property-label">{{ $t('remediesList.usage') }}:</span>
               <span class="property-value">{{ remedy.bestRemedy.usage }}</span>
             </div>
             <div class="remedy-property">
-              <span class="property-label">Benefit:</span>
+              <span class="property-label">{{ $t('remediesList.benefit') }}:</span>
               <span class="property-value">{{ remedy.bestRemedy.benefit }}</span>
             </div>
           </div>
         </div>
-        <button @click="saveCurrentRemedy(remedy)" class="save-btn">Save Remedy</button>
+
+        <button @click="saveCurrentRemedy(remedy)" class="save-btn">
+          {{ $t('remediesList.saveButton') }}
+        </button>
       </div>
     </div>
 
-    <p v-else class="no-results">No remedies found for "{{ searchTerm }}".</p>
+    <p v-else class="no-results">
+      {{ $t('remediesList.noResults') }} "{{ searchTerm }}".
+    </p>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSavedRemedies } from '@/composables/savedRemedies'
+import { useI18n } from 'vue-i18n'
+
+const { saveRemedy } = useSavedRemedies()
+const { locale } = useI18n() // 🔁 get current language from i18n
 
 const route = useRoute()
 const searchTerm = ref(route.query.category || '')
 const remedies = ref([])
-const loading = ref(false)
 
-const { saveRemedy } = useSavedRemedies()
+const saveCurrentRemedy = (remedy) => {
+  saveRemedy(remedy)
+}
 
-const saveCurrentRemedy = async (remedy) => {
-  const confirmSave = window.confirm("Do you want to save this remedy?");
-  if (!confirmSave) return;
+const fetchRemedies = async () => {
+  if (!searchTerm.value.trim()) return;
+
+  const lang = localStorage.getItem('lang') || 'en';
+  const category = encodeURIComponent(searchTerm.value.trim());
+
+  const url = `http://localhost:5000/api/remedies/${category}?lang=${lang}`;
+  console.log('Fetching remedies from:', url);
 
   try {
-    await saveRemedy(remedy);
-    alert("✅ Remedy saved successfully!");
+    const res = await fetch(url);
+    const result = await res.json();
+    console.log('Fetched result:', result);
+
+    // Adjust based on response shape
+    remedies.value = Array.isArray(result.title) ? result.title : result;
   } catch (err) {
-    console.error("❌ Error saving remedy:", err.message);
-    alert("❌ Failed to save remedy. Please check the console for more details.");
+    console.error('Error fetching remedies:', err);
+    remedies.value = [];
   }
 };
 
-const fetchRemedies = async () => {
-  if (!searchTerm.value.trim()) return
 
-  loading.value = true
-  remedies.value = []
 
-  try {
-    const res = await fetch(`http://localhost:5000/api/remedies?category=${encodeURIComponent(searchTerm.value)}`)
-    const data = await res.json()
-
-    if (!res.ok) {
-      throw new Error(data.message || 'Failed to fetch remedies')
-    }
-
-    remedies.value = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
-  } catch (err) {
-    console.error('Error fetching remedies:', err.message)
-    remedies.value = []
-  } finally {
-    loading.value = false
-  }
-}
-
+// Run on first load
 onMounted(() => {
   fetchRemedies()
 })
 
+// Re-fetch when route query changes
 watch(
   () => route.query.category,
   (newCategory) => {
@@ -145,6 +153,11 @@ watch(
     fetchRemedies()
   }
 )
+
+// Optional: Re-fetch when language changes
+watch(locale, () => {
+  fetchRemedies()
+})
 </script>
 
 
@@ -436,7 +449,7 @@ body.dark-theme .no-results {
   }
   
   .remedy-card {
-    padding: 16px;
-  }
+    padding: 16px
+  }
 }
 </style>

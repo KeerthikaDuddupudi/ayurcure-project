@@ -1,9 +1,9 @@
 <!-- ThemeToggle.vue -->
 <template>
-  <label class="switch">
-    <input type="checkbox" v-model="isDark" @change="toggleTheme" />
-    <span class="slider"></span>
-  </label>
+  <button class="theme-toggle" @click="toggleTheme" :aria-label="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+    <span v-if="isDark" class="icon">🌙</span>
+    <span v-else class="icon">🌞</span>
+  </button>
 </template>
 
 <script>
@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     toggleTheme() {
+      this.isDark = !this.isDark;
       this.applyTheme();
       localStorage.setItem("theme", this.isDark ? "dark" : "light");
     },
@@ -32,57 +33,30 @@ export default {
 </script>
 
 <style scoped>
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 42px;
-  height: 24px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+.theme-toggle {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  background-color: #ccc;
-  border-radius: 34px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.4s;
-}
-
-.slider:before {
-  content: "";
-  height: 18px;
-  width: 18px;
-  position: absolute;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
+  font-size: 26px;
+  padding: 6px;
   border-radius: 50%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-input:checked + .slider {
-  background-color: #66bb6a;
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  transform: scale(1.1);
 }
 
-input:checked + .slider:before {
-  transform: translateX(18px);
-}
-body.dark-theme {
-  background-color: #121212;
-  color: #f5f5f5;
+.icon {
+  display: inline-block;
 }
 
-body.dark-theme a {
-  color: #a8e6cf;
+/* Optional: Match dark mode toggle button styles more closely */
+body.dark-theme .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
-
 </style>

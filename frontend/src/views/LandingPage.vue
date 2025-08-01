@@ -600,15 +600,18 @@ onBeforeUnmount(() => {
 .flow-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; /* <-- centers vertically */
   gap: 40px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-height: 400px; /* Optional: match .flow-card height */
 }
+
 
 .flow-steps {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex-shrink: 0; /* Prevents shrinking */
 }
 
 .flow-step {
@@ -624,6 +627,7 @@ onBeforeUnmount(() => {
   transform: skewY(-20deg);
   opacity: 0.4;
   transition: all 0.3s ease;
+  
 }
 
 .flow-step.active {
@@ -633,9 +637,9 @@ onBeforeUnmount(() => {
 }
 
 .flow-card {
-  display: flex;
-  max-width: 1500px;
-  height:400px;
+  flex: 1;
+  max-width: 1000px;
+  height: 400px;
   background: white;
   border-radius: 16px;
   overflow: hidden;
@@ -692,62 +696,148 @@ onBeforeUnmount(() => {
 }
 
 /* Dark mode: landing page text */
-body.dark-theme .scroll-btn {
-  color: #f5f5f5;
-}
-body.dark-theme .auth-btn {
-  background: #121212;
-  color: #f5f5f5;
-  border-color: #ccc;
-}
-body.dark-theme .auth-btn:hover {
-  background: #333;
-  color: #fff;
+/* 🔆 DEFAULT LIGHT MODE STYLES ALREADY EXIST - KEEP AS IS */
+
+/* 🌙 DARK THEME STYLES */
+
+body.dark-theme {
+  background-color: #0f0f0f;
+  color: #e0e0e0;
 }
 
-/* Dark mode: about section */
+/* Landing Page */
+/* body.dark-theme .landing-page {
+  background: linear-gradient(to top, #1a1a1a, #111) center/cover no-repeat;
+} */
+
+/* body.dark-theme .content {
+  color: #e0e0e0;
+} */
+
+ body.dark-theme .headline span {
+  color: #a8e6cf;
+} 
+
+body.dark-theme .scroll-btn {
+  color: #1b986a;
+}
+
+/* About Section */
 body.dark-theme .about-section {
-  background-color: #1a1a1a;
-  color: #eaeaea;
+  background-color: #181818;
 }
-body.dark-theme .heading-with-underline{
-  color:#ffc107;
-}
-body.dark-theme .heading-with-underline::after {
-  background-color: #ffc107;
-}
+
 body.dark-theme .intro {
   color: #ccc;
 }
 
-/* Dark mode: carousel overlay remains dark, so just change text contrast */
-body.dark-theme .features-title{
- color:#333;
+/* Feature Section */
+body.dark-theme .features-section {
+  background-color: #222;
 }
 
-body.dark-theme .card-content h3,
+body.dark-theme .about-card {
+  background-color: #2b2b2b;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .card-content {
+  background-color: #2b2b2b;
+}
+
+body.dark-theme .card-content h3 {
+  color: #f0f0f0;
+}
+
 body.dark-theme .card-content p {
-  color: #333;
+  color: #ccc;
 }
 
-/* Dark mode: How AyurCure Makes a Difference */
+body.dark-theme .nav-btn {
+  color: #a8e6cf;
+}
+body.dark-theme .nav-btn:hover {
+  background-color: #a8e6cf;
+  color: #1a1a1a;
+}
+body.dark-theme .section-title,
+body.dark-theme .heading-with-underline {
+  color: rgb(31, 139, 31);
+}
+
+
+/* Difference Section */
 body.dark-theme .difference-section {
   background-color: #121212;
 }
-body.dark-theme .text-content h3,
+
+body.dark-theme .text-content h3 {
+  color: #f5f5f5;
+}
+
 body.dark-theme .text-content p,
 body.dark-theme .text-content ul {
-  color: #f0f0f0;
+  color: #cccccc;
 }
+
 body.dark-theme .text-content ul li::before {
-  color: #a8e6cf;
+  color: #81c784;
 }
 
+/* Doctor image hover */
+body.dark-theme .image-content:hover {
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.08);
+}
 
+/* Flow Section */
+body.dark-theme .app-flow-section {
+  background-color: #1c1c1c;
+}
 
-/* Dark mode: Emergency section stays vibrant or darkens slightly */
+body.dark-theme .flow-step {
+  background: #444;
+  color: #ddd;
+}
+
+body.dark-theme .flow-step.active {
+  background: #a8e6cf;
+  color: #111;
+}
+
+body.dark-theme .flow-card {
+  background-color: #222;
+  color: #eee;
+}
+
+body.dark-theme .flow-text h3 {
+  color: #ffffff;
+}
+
+body.dark-theme .flow-text p {
+  color: #c7c7c7;
+}
+
+/* Emergency Section */
 body.dark-theme .emergency {
-  background: linear-gradient(to right, #e53935, #b71c1c);
+  background: linear-gradient(to right, #d32f2f, #b71c1c);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .emergency a {
+  color: #fff59d;
+}
+
+/* Buttons */
+body.dark-theme .auth-btn {
+  background-color: #1e1e1e;
+  border-color: #888;
+  color: #eee;
+}
+
+body.dark-theme .auth-btn:hover {
+  background-color: #333;
+  color: #fff;
+  border-color: #ccc;
 }
 
 

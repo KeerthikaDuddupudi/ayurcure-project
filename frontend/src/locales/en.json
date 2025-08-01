@@ -105,12 +105,13 @@
     "loginBtn": "Login",
     "forgotPassword": "Forgot Password?"
   },
-  "navbar": {
+ "navbar": {
     "home": "Home",
     "remedies": "Remedies",
     "doctors": "Doctors",
-    "about": "About"
-  },
+    "about": "About",
+    "contact":"Contact us"
+},
   "home": {
     "hero": {
   "title": "AyurCure",
@@ -192,209 +193,47 @@
   "remedies": {
     "pageTitle": "AyurCure Remedies",
     "backButton": "← Back",
-    "expertTip": "🌿 Try mixing turmeric with warm milk at bedtime for cough relief.",
-    "ailments": {
-      "cold": {
-        "label": "Cold & Cough",
-        "eat": [
-          "Warm soups (chicken or vegetable)",
-          "Ginger honey tea",
-          "Citrus fruits like lemon, orange for Vitamin C",
-          "Steamed vegetables",
-          "Warm water with a pinch of black pepper"
-        ],
-        "avoid": [
-          "Cold beverages",
-          "Dairy products (can increase phlegm)",
-          "Fried foods",
-          "Sweet desserts",
-          "Processed foods"
-        ],
-        "benefits": "Ayurvedic remedies for cold and cough focus on boosting immunity, clearing respiratory passages, and reducing inflammation. Ingredients like ginger, honey, and turmeric are commonly used for their warming and antiseptic properties, helping to soothe sore throats and naturally alleviate congestion."
-      },
-      "acne": {
-        "label": "Acne",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "indigestion": {
-        "label": "Indigestion",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "headache": {
-        "label": "Headache",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "hairfall": {
-        "label": "Hairfall",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "menstrual": {
-        "label": "Menstrual Issues",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "constipation": {
-        "label": "Constipation",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      },
-      "skin": {
-        "label": "Skin Issues",
-        "eat": [],
-        "avoid": [],
-        "benefits": ""
-      }
-    },
-    "details": {
-      "plantLabel": "Plant:",
-      "partUsedLabel": "Part Used:",
-      "preparationLabel": "Preparation:",
-      "dosageLabel": "Dosage:",
-      "cautionLabel": "Caution:",
-      "saveRemedy": "📌 Save Remedy",
-      "unsaveRemedy": "❌ Unsave Remedy",
-      "unsaveRemedyText": "❌ Unbookmarked",
-      "saveRemedyText": "✅ Saved",
-
-      "tulsiTea": {
-        "name": "Tulsi Tea",
-        "plant": "Tulsi (Holy Basil)",
-        "part": "Leaves",
-        "preparation": "Boil 5 leaves in 1 cup water for 5 minutes. Add honey.",
-        "dosage": "Twice daily after meals",
-        "caution": "Avoid during pregnancy"
-      },
-      "gingerDecoction": {
-        "name": "Ginger Decoction",
-        "plant": "Ginger",
-        "part": "Root",
-        "preparation": "Boil crushed ginger in water for 10 minutes. Add jaggery or honey.",
-        "dosage": "Morning and evening",
-        "caution": "Avoid on empty stomach"
-      },
-      "neemPaste": {
-        "name": "Neem Paste",
-        "plant": "Neem",
-        "part": "Leaves",
-        "preparation": "Grind neem leaves and apply paste to affected area.",
-        "dosage": "Once daily",
-        "caution": "Avoid open wounds"
-      },
-      "multaniMittiMask": {
-        "name": "Multani Mitti Mask",
-        "plant": "Fuller's Earth",
-        "part": "Clay",
-        "preparation": "Mix with rose water and apply to face.",
-        "dosage": "2-3 times a week",
-        "caution": "Avoid if skin is too dry"
-      },
-      "jeeraWater": {
-        "name": "Jeera Water",
-        "plant": "Cumin",
-        "part": "Seeds",
-        "preparation": "Boil 1 tsp cumin seeds in 2 cups of water. Strain and drink.",
-        "dosage": "Twice a day after meals",
-        "caution": "Avoid excess during pregnancy"
-      },
-      "ajwainWithSalt": {
-        "name": "Ajwain with Salt",
-        "plant": "Carom Seeds",
-        "part": "Seeds",
-        "preparation": "Roast with black salt and chew with warm water.",
-        "dosage": "1/2 tsp as needed",
-        "caution": "Avoid in case of ulcers"
-      },
-      "peppermintOilMassage": {
-        "name": "Peppermint Oil Massage",
-        "plant": "Mint",
-        "part": "Oil",
-        "preparation": "Apply 1-2 drops on forehead and massage gently.",
-        "dosage": "As needed",
-        "caution": "Avoid near eyes"
-      },
-      "gingerTea": {
-        "name": "Ginger Tea",
-        "plant": "Ginger",
-        "part": "Root",
-        "preparation": "Boil with lemon and honey.",
-        "dosage": "Twice daily",
-        "caution": "Avoid if prone to acidity"
-      },
-      "amlaOilMassage": {
-        "name": "Amla Oil Massage",
-        "plant": "Indian Gooseberry",
-        "part": "Fruit",
-        "preparation": "Massage into scalp. Leave 1 hour, rinse.",
-        "dosage": "2-3 times per week",
-        "caution": "Avoid if scalp is very dry"
-      },
-      "fenugreekPaste": {
-        "name": "Fenugreek Paste",
-        "plant": "Fenugreek",
-        "part": "Seeds",
-        "preparation": "Soak overnight, grind, apply to scalp.",
-        "dosage": "Once a week",
-        "caution": "Rinse thoroughly"
-      },
-      "cinnamonTea": {
-        "name": "Cinnamon Tea",
-        "plant": "Cinnamon",
-        "part": "Bark",
-        "preparation": "Boil a small stick in water. Add honey.",
-        "dosage": "1-2 times a day during periods",
-        "caution": "Avoid if on blood thinners"
-      },
-      "ajwainWater": {
-        "name": "Ajwain Water",
-        "plant": "Carom Seeds",
-        "part": "Seeds",
-        "preparation": "Boil 1 tsp in water. Drink warm.",
-        "dosage": "Twice daily during cramps",
-        "caution": "Avoid excessive use"
-      },
-      "triphalaPowder": {
-        "name": "Triphala Powder",
-        "plant": "Triphala",
-        "part": "Fruits",
-        "preparation": "Mix 1 tsp in warm water before bed.",
-        "dosage": "Once daily",
-        "caution": "Consult for chronic issues"
-      },
-      "flaxSeeds": {
-        "name": "Flax Seeds",
-        "plant": "Flax",
-        "part": "Seeds",
-        "preparation": "Soak in warm water and drink.",
-        "dosage": "Morning before food",
-        "caution": "Drink enough water"
-      },
-      "turmericPaste": {
-        "name": "Turmeric Paste",
-        "plant": "Turmeric",
-        "part": "Root",
-        "preparation": "Mix with milk or aloe gel. Apply on skin.",
-        "dosage": "2-3 times/week",
-        "caution": "May stain skin temporarily"
-      },
-      "aloeVeraGel": {
-        "name": "Aloe Vera Gel",
-        "plant": "Aloe Vera",
-        "part": "Gel",
-        "preparation": "Apply to affected area.",
-        "dosage": "Daily use",
-        "caution": "Patch test for sensitive skin"
-      }
-    }
+    "expertTip": "🌿 Try mixing turmeric with warm milk at bedtime for cough relief."
+  },
+  "search": {
+    "placeholder": "Search by Category (e.g., Hair, Skin)",
+    "button": "Search"
+  },
+  "remediesList": {
+  "pageTitle": "AyurCure Remedies",
+  "searchPlaceholder": "Search by Category (e.g., Hair, Skin)",
+  "searchButton": "Search",
+  "noResults": "No remedies found for",
+  "title": "Title",
+  "plant": "Plant",
+  "partUsed": "Part Used",
+  "ingredients": "Ingredients",
+  "preparation": "Preparation",
+  "dosage": "Dosage",
+  "caution": "Caution",
+  "note": "Note",
+  "subcategory": "Subcategory",
+  "benefits": "Benefits",
+  "bestRemedy": "Best Remedy",
+  "saveButton": "Save Remedy",
+  "usage": "Usage",
+  "benefit": "Benefit"
+},
+  "aiSuggest": {
+    "headerLabel": "Get Expert AI Suggestions",
+    "inputPlaceholder": "Type your health concern (e.g., headache, cough)...",
+    "buttonText": "Ask AI",
+    "disclaimer": "⚠ AI suggestions are informational. Always consult a doctor."
+  },
+  "ailment": {
+    "cold": "Cold",
+    "acne": "Acne",
+    "indigestion": "Indigestion",
+    "headache": "Headache",
+    "hair fall": "Hair Fall",
+    "menstrual pain": "Menstrual Pain",
+    "constipation": "Constipation",
+    "skin": "Skin Issues"
   },
   "auth": {
     "joinAyurCureTitle": "Join AyurCure",
@@ -452,17 +291,20 @@
   },
   
   "doctors": {
-    "title": "Our Doctors",
-    "searchPlaceholder": "Search by symptom (e.g. acne, pcod)…",
-    "bookButton": "Book Appointment",
+    "heading": "Our Doctors",
+    "searchPlaceholder": "Search by symptom (e.g. acne, pcod)...",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "degree": "Degree",
     "specialization": "Specialization",
     "location": "Location",
-    "phone": "Phone",
-    "book": "Book Appointment"
+    "book": "Book Appointment",
+    "loading": "Loading doctors...",
+    "noMatch": "No matching doctors found."
   },
 "profile": {
   "back": "Back",
-  "signOut": "Sign Out →",
   "personalInfo": "Personal Information",
   "memberSince": "Member Since",
   "dob": "Date of Birth",

@@ -1,6 +1,6 @@
 <template>
   <div class="app-wrapper">
-    <h2 class="remedies-title">Explore Ayurvedic Remedies</h2>
+    <h2 class="remedies-title">{{ $t('remedies.pageTitle') }}</h2>
 
     <SearchBar @select="showRemedy" />
 
@@ -17,17 +17,17 @@
         >
           <img
             class="ailment-img"
-            :src="`/images/${a.image}`"
+            :src="'/images/' + a.image"
             :alt="a.key"
           />
-          <h3>{{ formatCategoryName(a.key) }}</h3>
+          <h3>{{ $t('ailment.' + a.key) }}</h3>
         </div>
       </div>
 
       <button class="scroll-btn right" @click="scrollRight">›</button>
     </div>
 
-    <div class="ai-tip">💡 Get Expert AI Tips Tailored For You!</div>
+    <div class="ai-tip">💡{{ $t('remedies.expertTip') }}</div>
     <AiSuggest />
   </div>
 </template>
@@ -36,14 +36,14 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SearchBar from '../components/Searchbar.vue'
-import AiSuggest from '../components/AiSuggest.vue';
+import AiSuggest from '../components/AiSuggest.vue'
 
 const router = useRouter()
 const scrollContainer = ref(null)
 const activeRemedy = ref(null)
 
 const ailments = [
-  { key: 'cold', image: 'cold_final.jpg' },  // ← ✅ Add comma here
+  { key: 'cold', image: 'cold_final.jpg' },
   { key: 'acne', image: 'acne1.jpg' },
   { key: 'indigestion', image: 'indigestion1.jpg' },
   { key: 'headache', image: 'head.jpg' },
@@ -51,8 +51,7 @@ const ailments = [
   { key: 'menstrual pain', image: 'mensuralpain.jpg' },
   { key: 'constipation', image: 'constipation.jpg' },
   { key: 'skin', image: 'skin.jpg' }
-];
-
+]
 
 function showRemedy(type) {
   activeRemedy.value = type
@@ -78,10 +77,6 @@ function scrollLeft() {
 function scrollRight() {
   scrollContainer.value?.scrollBy({ left: 300, behavior: 'smooth' })
 }
-
-function formatCategoryName(key) {
-  return key.charAt(0).toUpperCase() + key.slice(1)
-}
 </script>
 
 
@@ -89,6 +84,7 @@ function formatCategoryName(key) {
 <style scoped>
 /* ALL STYLES REMAIN UNCHANGED AS REQUESTED */
 .remedies-title {
+  font-size: 45px;
   color: #2e7d32;
 }
 body.dark-theme .remedies-title {

@@ -13,17 +13,17 @@
       <div class="carousel-wrapper">
         <transition name="slide-card" mode="out-in">
           <div class="highlight-card" :key="current.id">
-            <img :src="current.imageUrl" :alt="current.name" class="highlight-img" />
+            <img :src="current.imageUrl" :alt="$t(current.nameKey)" class="highlight-img" />
             <div class="highlight-text">
-              <h3>{{ current.name }}</h3>
-              <p>{{ current.desc }}</p>
+              <h3>{{ $t(current.nameKey) }}</h3>
+              <p>{{ $t(current.descKey) }}</p>
             </div>
           </div>
         </transition>
       </div>
     </section>
     <section class="consult-doctor">
-      <h2>{{ $t('home.consult.title') }}</h2>
+      <h2 class ="doctors-title">{{ $t('home.consult.title') }}</h2>
       <p>{{ $t('home.consult.desc') }}</p>
       <router-link to="/doctors" class="doctor-button">
         {{ $t('home.consult.button') }}
@@ -67,32 +67,37 @@ export default {
       remedies: [
         {
           id: 1,
-          name: 'Lemon & Honey', // This can stay hardcoded or be a key if you want to translate the remedy name itself
-          desc: 'Boosts immunity and soothes throat. A classic home remedy for colds and coughs, rich in Vitamin C and natural antibacterial properties.', // Same for desc
+          // CHANGED: Use nameKey and descKey pointing to the full JSON path
+          nameKey: 'home.remedies.lemonHoney.name',
+          descKey: 'home.remedies.lemonHoney.desc',
           imageUrl: 'https://img.freepik.com/premium-photo/fresh-lemon-with-leaf-honey-with-honey-dipper-isolated-white-wall-ingredient-summer-beverage-concept_34435-4068.jpg?w=1380'
         },
         {
           id: 2,
-          name: 'Herbal Mix',
-          desc: 'Traditional healing blend using various potent herbs for overall wellness. Supports natural bodily functions and promotes balance.',
+          // CHANGED: Use nameKey and descKey pointing to the full JSON path
+          nameKey: 'home.remedies.herbalMix.name',
+          descKey: 'home.remedies.herbalMix.desc',
           imageUrl: 'https://tse3.mm.bing.net/th/id/OIP.OZyL9BI5FEWEgLF35WxArgHaE8?w=1000&h=667&rs=1&pid=ImgDetMain&o=7&rm=3'
         },
         {
           id: 3,
-          name: 'Neem Leaf',
-          desc: 'Fights bacteria and purifies blood. Known for its powerful antiseptic and detoxifying qualities, benefiting skin and internal health.',
+          // CHANGED: Use nameKey and descKey pointing to the full JSON path
+          nameKey: 'home.remedies.neemLeaf.name',
+          descKey: 'home.remedies.neemLeaf.desc',
           imageUrl: 'https://img.freepik.com/premium-photo/medicinal-neem-leaf-white-surface-azadirachta-indica_136354-3554.jpg?w=2000'
         },
         {
           id: 4,
-          name: 'Aloe Vera',
-          desc: 'Soothes skin and promotes healing. Ideal for burns, irritations, and internal digestive health due to its anti-inflammatory properties.',
+          // CHANGED: Use nameKey and descKey pointing to the full JSON path
+          nameKey: 'home.remedies.aloeVera.name',
+          descKey: 'home.remedies.aloeVera.desc',
           imageUrl: 'https://farmseller.in/wp-content/uploads/2022/01/Alovera-plant.jpeg'
         },
         {
           id: 5,
-          name: 'Golden Milk',
-          desc: 'Anti-inflammatory turmeric drink. A warming, nourishing beverage that supports joint health, digestion, and boosts immunity.',
+          // CHANGED: Use nameKey and descKey pointing to the full JSON path
+          nameKey: 'home.remedies.goldenMilk.name',
+          descKey: 'home.remedies.goldenMilk.desc',
           imageUrl: 'https://foolproofliving.com/wp-content/uploads/2019/02/Turmeric-Golden-Milk-Recipe-9304-600x600.jpg'
         }
       ],
@@ -107,8 +112,7 @@ export default {
   },
   computed: {
     current() {
-      // You might want to translate 'name' and 'desc' here if you want those
-      // to change with language. For simplicity, they are kept as is for now.
+      // This remains correct, as it just returns the current object from the remedies array
       return this.remedies[this.index];
     }
   },
@@ -137,7 +141,7 @@ export default {
   --green-dark: #1e5631;
   --mint: #a8e6cf;
   --white: #ffffff;
-  --bg-light:  #013220;
+  --bg-light: #013220;
   --accent-dark: #14532d;
   --danger: #ff1744;
   --shadow: rgba(0, 0, 0, 0.08);
@@ -145,20 +149,16 @@ export default {
   --font-main: 'Segoe UI', sans-serif;
 }
 body {
-  margin: 0; /* Remove default body margin */
+  margin: 0;
   overflow-x: hidden;
   font-family: var(--font-main);
   background-color: var(--bg-light);
   color: var(--white);
   line-height: 1.6;
-
 }
 
-/* --- Hero Section Enhancements --- */
 .hero {
-  /* Ensure the hero section takes full viewport height for a grander feel */
   min-height: 100vh;
-  /* Add a subtle overlay for better text readability on the image */
   background:
     linear-gradient(rgba(30, 86, 49, 0.5), rgba(30, 86, 49, 0.5)),
     url('../assets/image.png') no-repeat center center / cover;
@@ -175,7 +175,6 @@ body {
 }
 
 .hero-content {
-  /* Add a slight background to the content for better contrast, with a subtle blur */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   border-radius: 20px;
@@ -186,7 +185,6 @@ body {
 }
 
 .hero h1 {
-  /* Refine font size for larger screens and add a more prominent shadow */
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -194,14 +192,12 @@ body {
   text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
 }
 .hero p {
-  /* Adjust line height for better readability */
   font-size: 1.4rem;
   margin-bottom: 2rem;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   line-height: 1.5;
 }
 .hero button {
-  /* Add a subtle gradient to the button for more depth */
   background: linear-gradient(45deg, #a8e6cf, #77dd77);
   border: none;
   padding: 1rem 2rem;
@@ -216,24 +212,23 @@ body {
 .hero button:hover {
   background-color: #ffffff;
   color: #1e3d32;
-  transform: translateY(-5px) scale(1.02); /* More pronounced lift on hover */
+  transform: translateY(-5px) scale(1.02);
   box-shadow: 0 12px 28px rgba(0, 128, 0, 0.5);
 }
 .hero button:active {
-  transform: translateY(-2px) scale(0.98); /* Press down effect */
+  transform: translateY(-2px) scale(0.98);
   box-shadow: 0 4px 10px rgba(0, 128, 0, 0.2);
 }
-/* --- Remedy Search Section Enhancements --- */
 .search-section {
   background: linear-gradient(145deg, #e8f5e9, #dcf8d8);
   padding: 3.5rem 2.5rem;
-    text-align: center;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-radius:30px;
-    max-width: 900px;
-    margin: 3rem auto ;
-    margin-top : 0;
+  text-align: center;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-radius: 30px;
+  max-width: 900px;
+  margin: 3rem auto;
+  margin-top: 0;
   padding-top: 0;
 }
 .section-heading {
@@ -257,26 +252,26 @@ body {
 }
 
 .search-section input {
-  padding: 1.1rem; /* Larger input field */
-  width: 65%; /* Wider input */
-  border-radius: 30px; /* Pill-shaped input */
+  padding: 1.1rem;
+  width: 65%;
+  border-radius: 30px;
   border: 2px solid #ddd;
   margin-top: 1rem;
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
   font-size: 1.1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add transition for focus */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .search-section input:focus {
   outline: none;
   border-color: var(--mint);
-  box-shadow: 0 0 0 4px rgba(168, 230, 207, 0.5); /* Glowing effect on focus */
+  box-shadow: 0 0 0 4px rgba(168, 230, 207, 0.5);
 }
 .search-section button {
-  padding: 1.1rem 1.8rem; /* Larger button */
-  background: linear-gradient(45deg, #1e5631, #3cb371); /* More defined gradient */
+  padding: 1.1rem 1.8rem;
+  background: linear-gradient(45deg, #1e5631, #3cb371);
   color: white;
   border: none;
-  border-radius: 30px; /* Pill-shaped button */
+  border-radius: 30px;
   margin-left: 0.5rem;
   font-size: 1.1rem;
   font-weight: 600;
@@ -284,7 +279,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 .search-section button:hover:not(:disabled) {
-  background: linear-gradient(45deg, #1b4d2d, #339966); /* Matched to doctor-button hover gradient */
+  background: linear-gradient(45deg, #1b4d2d, #339966);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
@@ -301,40 +296,40 @@ body {
   font-size: 0.95rem;
 }
 
-/* --- Doctor Suggestion Section Enhancements --- */
 .consult-doctor {
-  background: linear-gradient(145deg, #e8f5e9, #dcf8d8); /* Subtle gradient */
-  padding: 3.5rem 2.5rem; /* Changed to match search-section padding */
-    text-align: center;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-radius:30px;
-    max-width: 900px; /* Set a maximum width */
-    margin: 3rem auto ;/* More padding */
-    margin-top : 0;
+  background: linear-gradient(145deg, #e8f5e9, #dcf8d8);
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-radius: 30px;
+  max-width: 900px;
+  margin: 3rem auto;
+  margin-top: 0;
   padding-top: 0;
 }
 .consult-doctor h2 {
+  margin-top: 10px;
   color: var(--green-dark);
-  font-size: 2.8rem; /* Larger heading */
+  font-size: 2.8rem;
   margin-bottom: 1.5rem;
   letter-spacing: 0.8px;
 }
 .consult-doctor p {
-  font-size: 1.25rem; /* Larger paragraph text */
+  font-size: 1.25rem;
   color: #333;
   margin-bottom: 2rem;
-  max-width: 800px; /* Widen max-width */
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.7;
 }
 
 .doctor-button {
-  background: linear-gradient(45deg, #1e5631, #3cb371); /* More defined gradient */
+  background: linear-gradient(45deg, #1e5631, #3cb371);
   color: white;
-  padding: 1rem 2.5rem; /* Larger button */
-  border-radius: 30px; /* Pill-shaped button */
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 600;
@@ -349,26 +344,26 @@ body {
 
 
 .remedy-icons {
-  margin-top: 3rem; /* More space above icons */
+  margin-top: 3rem;
   display: flex;
-  gap: 1.5rem; /* More space between icon cards */
+  gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 .icon-card {
-  background: linear-gradient(135deg, var(--mint), #caffca); /* Gentle gradient */
+  background: linear-gradient(135deg, var(--mint), #caffca);
   padding: 1.2rem;
-  border-radius: 20px; /* More rounded */
-  width: 140px; /* Slightly wider cards */
+  border-radius: 20px;
+  width: 140px;
   font-size: 1.3rem;
   text-align: center;
-  transition: all 0.3s ease; /* Slower transition for a smoother feel */
+  transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem; /* Space between icon and text */
+  gap: 0.5rem;
 }
 .icon-card span {
   font-size: 0.95rem;
@@ -376,22 +371,21 @@ body {
   color: var(--accent-dark);
 }
 .icon-card:hover {
-  transform: translateY(-7px) scale(1.05); /* More pronounced lift and scale */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); /* Stronger shadow on hover */
+  transform: translateY(-7px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
   background: linear-gradient(135deg, #caffca, var(--mint));
 }
 
-/* --- Remedy Highlight Section Enhancements (Carousel) --- */
 .remedy-highlight-section {
- background: linear-gradient(145deg, #e8f5e9, #dcf8d8); /* Subtle gradient */
-  padding: 3.5rem 2.5rem; /* Changed to match search-section padding */
-    text-align: center;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-radius:30px;
-    max-width: 900px; /* Set a maximum width */
-    margin: 3rem auto ;/* More padding */
-    margin-top : 0;
+  background: linear-gradient(145deg, #e8f5e9, #dcf8d8);
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-radius: 30px;
+  max-width: 900px;
+  margin: 3rem auto;
+  margin-top: 0;
   padding-top: 0;
 }
 .carousel-wrapper {
@@ -399,10 +393,11 @@ body {
   justify-content: center;
   overflow: visible;
   position: relative;
-  height: 200px; /* Reduced height for the carousel wrapper */
+  height: 200px;
   perspective: 1000px;
 }
 .highlight-title {
+  margin-top: 10px;
   text-align: center;
   font-size: 2.5rem;
   color: var(--green-dark);
@@ -414,10 +409,10 @@ body {
 .highlight-card {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #e0f8e0, #99d79e); /* Soft green gradient */
+  background: linear-gradient(135deg, #e0f8e0, #99d79e);
   padding: 1rem 1.5rem;
   border-radius: 25px;
-  box-shadow: 0 10px 30px rgba(0, 80, 0, 0.15); /* Green-tinted shadow */
+  box-shadow: 0 10px 30px rgba(0, 80, 0, 0.15);
   width: 95%;
   max-width: 950px;
   height: 200px;
@@ -432,7 +427,7 @@ body {
 .highlight-card:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: 0 20px 40px rgba(0, 100, 0, 0.3);
-  background: linear-gradient(135deg, #d5f8d5, #b6f7b8); /* Brighter green on hover */
+  background: linear-gradient(135deg, #d5f8d5, #b6f7b8);
 }
 
 .highlight-img {
@@ -472,8 +467,7 @@ body {
 }
 .slide-card-leave-to {
   transform: translateX(-100%) scale(0.9);
-  opacity:0;
-
+  opacity: 0;
 }
 .slide-card-enter-active,
 .slide-card-leave-active {
@@ -501,7 +495,7 @@ body {
   margin: 3rem auto;
   margin-top: 0;
   padding-top: 1rem;
-  overflow: hidden; /* Ensures ropes don't overflow */
+  overflow: hidden;
 }
 
 .features h2 {
@@ -511,7 +505,6 @@ body {
   letter-spacing: 1px;
 }
 
-/* Card grid stays within features */
 .hanging-card-grid {
   display: flex;
   flex-wrap: wrap;
@@ -519,10 +512,9 @@ body {
   gap: 2rem;
   position: relative;
   padding: 2rem;
-  padding-top: 4rem; /* Rope spacing */
+  padding-top: 4rem;
 }
 
-/* Individual card styling */
 .hanging-card {
   position: relative;
   background: linear-gradient(135deg, #ffffff, #f9fff9);
@@ -537,16 +529,14 @@ body {
   flex-direction: column;
   align-items: center;
   z-index: 1;
-  margin-top: 2rem; /* Adds spacing inside features */
+  margin-top: 2rem;
 }
 
-/* Hover effect */
 .hanging-card:hover {
   transform: translateY(-10px) rotateZ(-2deg);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
 
-/* Rope positioned inside the features box */
 .rope {
   position: absolute;
   top: -40px;
@@ -559,7 +549,6 @@ body {
   z-index: 0;
 }
 
-/* Card content styling */
 .card-content {
   display: flex;
   flex-direction: column;
@@ -588,8 +577,6 @@ body {
   color: #555;
 }
 
-
-/* --- Emergency Section Enhancements --- */
 .emergency {
   background: linear-gradient(to right, #ff4e50, #f44336);
   color: white;
@@ -616,17 +603,24 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 @keyframes pulse-danger {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
 }
 
-
-
-/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2.8rem;
@@ -636,7 +630,7 @@ body {
   }
   .highlight-card {
     flex-direction: column;
-    height: auto; /* Allow height to adjust on smaller screens */
+    height: auto;
     width: 95%;
     padding: 1rem;
   }
@@ -694,6 +688,26 @@ body {
   .problems li {
     width: 90%;
   }
+}
+body.dark-theme .consult-doctor p,
+body.dark-theme .consult-doctor h2,
+body.dark-theme .features h2,
+body.dark-theme .hanging-card p,
+body.dark-theme .highlight-title{
+  color:white;
+}
+
+body.dark-theme  .card-content{
+  color:black;
+}
+body.dark-theme .consult-doctor,
+body.dark-theme .features,
+body.dark-theme .remedy-highlight-section{
+  background:#212121;
+}
+
+body.dark-theme .hanging-card{
+  background: #757575;
 }
 
 </style>

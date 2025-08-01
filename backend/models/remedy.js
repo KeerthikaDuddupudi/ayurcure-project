@@ -1,103 +1,76 @@
 const mongoose = require('mongoose');
 
-const remedySchema = new mongoose.Schema({
-  category: {
-    type: String,
-    required: true,
-    enum: [
-      'cold and cough',
-      'indigestion',
-      'menstrual pain',
-      'constipation',
-      'acne',
-      'skin',
-      'DarkCircles',
-      'hair fall',
-      'weightgain',
-      'weightloss',
-      'Diabetes',
-      'BloodPressure',
-      'Thyroid',
-      'EyeHealth',
-      'StressAndAnxiety',
-      'HeadacheAndMigraine',
-      'CosmeticTreatment',
-      'LiverProblem',
-      'MenSexualHealth',
-      'RespiratoryIssues',
-      'PsychologicalIssues',
-      'HeartHealth',
-      'EyeSight',
-      'Tumors',
-      'Cancer'
-    ]
-  },
-  subcategory: {
-    type: String,
-    enum: ['Anxiety', 'Depression', 'Insomnia', 'OCD', 'Stress']
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  plant: {
-    type: String,
-  },
-  partUsed: {
-    type: String
-  },
-  practice: {
-    type: String
-  },
-  ingredients: {
-    type: [String]
-  },
-  preparation: {
-    type: String
-  },
-  dosage: {
-    type: String
-  },
-  usage: {
-    type: String
-  },
-  caution: {
-    type: String
-  },
-  benefits: {
-    type: [String]
-  },
-  note: {
-    type: String
-  },
-  bestRemedy: {
-    type: {
-      title: String,
-      preparation: String,
-      usage: String,
-      benefit: String
-    }
-  },
-  duration: {
-    type: String
-  },
-  frequency: {
-    type: String
-  },
-  method: {
-    type: String
-  }
-}, { 
-  collection: 'remedies', // Explicitly set collection name
-  timestamps: true // Automatically add createdAt and updatedAt
+// Helper function to create language fields
+const createLanguageField = (required = true) => ({
+  en: { type: String, required },
+  hi: { type: String, required },
+  te: { type: String, required }
 });
 
-// Indexes for better query performance
-remedySchema.index({ category: 1 });
-remedySchema.index({ subcategory: 1 });
-remedySchema.index({ title: 1 });
-remedySchema.index({ plant: 1 });
+// Schema for ingredients (matches your array structure)
+const ingredientSchema = new mongoose.Schema({
+  en: { type: String, required: true },
+  hi: { type: String, required: true },
+  te: { type: String, required: true }
+}, { _id: false });
 
+// Main remedy schema
+const remedySchema = new mongoose.Schema({
+  // Basic information
+  title: createLanguageField(),
+  plant: createLanguageField(false),
+  partUsed: createLanguageField(false),
+  
+  // Category information
+  category: createLanguageField(),
+  
+  // Ingredients list (now as array)
+  ingredients: {
+    type: [ingredientSchema],
+    required: true,
+    validate: {
+  validator: array => !array || array.length > 0,
+  message: 'At least one ingredient is required',
+   }
+
+  },
+  
+  // Preparation instructions
+  preparation: createLanguageField(false),
+  
+  // Usage instructions
+  usage: createLanguageField(false),
+  
+  // Optional dosage information
+  dosage: createLanguageField(false),
+  
+  // Optional method information
+  method: createLanguageField(false),
+  
+  // Optional frequency information
+  frequency: createLanguageField(false),
+  
+  // Optional duration information
+  duration: createLanguageField(false),
+  
+  // Benefits list
+  benefits: {
+    type: [createLanguageField()],
+    default: []
+  },
+  
+  // Optional notes
+  note: createLanguageField(false),
+  
+  // Optional cautions
+  caution: createLanguageField(false)
+  
+}, {
+  collection: "rem",
+  timestamps: true // Adds createdAt and updatedAt fields
+});
+
+// Create the model
 const Remedy = mongoose.model('Remedy', remedySchema);
 
 module.exports = Remedy;
