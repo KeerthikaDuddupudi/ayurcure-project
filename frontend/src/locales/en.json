@@ -306,6 +306,8 @@
 "profile": {
   "back": "Back",
   "personalInfo": "Personal Information",
+  "signOut": "Sign Out",
+  "name": "Name",
   "memberSince": "Member Since",
   "dob": "Date of Birth",
   "gender": "Gender",
