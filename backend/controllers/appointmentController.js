@@ -62,8 +62,12 @@ exports.createAppointment = async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log("📩 Email sent to doctor:", doctor.email);
+    try {
+  await transporter.sendMail(mailOptions);
+  console.log("📩 Email sent to doctor:", doctor.email);
+} catch (err) {
+  console.error("❌ Email failed:", err.message);
+}
 
     await Notification.create({
       email,
@@ -106,9 +110,9 @@ exports.confirmAppointmentTime = async (req, res) => {
       `,
     };
 
-    try {
-  await transporter.sendMail(mailOptions);
-  console.log("📩 Email sent to doctor:", doctor.email);
+   try {
+  await transporter.sendMail(userMail);
+  console.log("📩 Confirmation email sent to user:", appointment.email);
 } catch (err) {
   console.error("❌ Email failed:", err.message);
 }
