@@ -24,7 +24,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.options("/*", cors());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://ayurcure-project.vercel.app");
