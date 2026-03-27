@@ -10,14 +10,22 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("❌ SMTP Error:", error);
-  } else {
-    console.log("✅ SMTP Ready");
-  }
-});
+try {
+  console.log("🚀 Trying to send email...");
+
+  const info = await transporter.sendMail(mailOptions);
+
+  console.log("✅ Email sent successfully!");
+  console.log("📨 Response:", info);
+
+} catch (err) {
+  console.error("❌ Email FAILED:");
+  console.error(err);
+}
 
 // 1. Book appointment, notify doctor
 exports.createAppointment = async (req, res) => {
