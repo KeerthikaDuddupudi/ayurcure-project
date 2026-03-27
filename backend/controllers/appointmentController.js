@@ -38,7 +38,7 @@ exports.createAppointment = async (req, res) => {
     const timeButtons = timeOptions
       .map(
         (time) => `
-        <a href="http://localhost:5000/api/appointments/confirm?appointmentId=${appointment._id}&time=${time}">
+        <a href="https://ayurcure-project.onrender.com/api/appointments/confirm?appointmentId=${appointment._id}&time=${time}">
           <button style="margin: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">
             ${time}
           </button>
@@ -106,8 +106,12 @@ exports.confirmAppointmentTime = async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(userMail);
-    console.log("📩 Confirmation sent to user:", appointment.email);
+    try {
+  await transporter.sendMail(mailOptions);
+  console.log("📩 Email sent to doctor:", doctor.email);
+} catch (err) {
+  console.error("❌ Email failed:", err.message);
+}
 
     await Appointment.findByIdAndUpdate(appointmentId, {
       status: "confirmed",
