@@ -63,7 +63,7 @@ console.log("Doctor email from DB:", doctor.email);
 
     const mailOptions = {
       from: `"AyurCure" <${process.env.EMAIL_USER}>`,
-      to: doctor.email,
+      to: process.env.EMAIL_USER, // Send to admin email for testing
       subject: `New Appointment Request from ${name}`,
       html: `
         <h2>New Appointment Request</h2>
