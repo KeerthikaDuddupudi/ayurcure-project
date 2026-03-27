@@ -3,9 +3,11 @@ const Doctor = require("../models/Doctor");
 const Notification = require("../models/Notification");
 const nodemailer = require("nodemailer");
 
-// Nodemailer setup
+// ✅ UPDATED Nodemailer setup (IMPORTANT)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -16,11 +18,12 @@ const transporter = nodemailer.createTransport({
 exports.createAppointment = async (req, res) => {
   try {
     const { name, email, phone, date, doctorId, concern } = req.body;
+
     if (!name || !email || !phone || !date || !doctorId) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    console.log("📥 New appointment request received:", req.body);
+    console.log("📥 New appointment request:", req.body);
 
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
@@ -33,7 +36,7 @@ exports.createAppointment = async (req, res) => {
       phone,
       date,
       doctorId,
-      concern, // ✅ include concern in DB
+      concern,
       status: "pending",
     });
 
@@ -49,8 +52,10 @@ exports.createAppointment = async (req, res) => {
       )
       .join("");
 
+    console.log("📤 Sending email to doctor:", doctor.email);
+
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
       to: doctor.email,
       subject: `New Appointment Request from ${name}`,
       html: `
@@ -60,17 +65,17 @@ exports.createAppointment = async (req, res) => {
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Concern:</strong> ${concern || "N/A"}</p>
         <p><strong>Date:</strong> ${new Date(date).toDateString()}</p>
-        <p>Please select a time to confirm:</p>
+        <p>Please select a time:</p>
         ${timeButtons}
       `,
     };
 
     try {
-  await transporter.sendMail(mailOptions);
-  console.log("📩 Email sent to doctor:", doctor.email);
-} catch (err) {
-  console.error("❌ Email failed:", err.message);
-}
+      const info = await transporter.sendMail(mailOptions);
+      console.log("✅ Email sent:", info.response);
+    } catch (err) {
+      console.error("❌ Email error:", err);
+    }
 
     await Notification.create({
       email,
@@ -79,17 +84,18 @@ exports.createAppointment = async (req, res) => {
 
     req.app.get("io")?.emit("newNotification", {
       email,
-      message: `Your appointment with Dr. ${doctor.name} is pending confirmation.`,
+      message: `Your appointment with Dr. ${doctor.name} is pending.`,
     });
 
-    res.status(200).json({ message: "Appointment request sent to doctor." });
+    res.status(200).json({ message: "Appointment request sent." });
+
   } catch (error) {
     console.error("❌ Error creating appointment:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
 
-// 2. Confirm time by doctor
+// 2. Confirm appointment
 exports.confirmAppointmentTime = async (req, res) => {
   try {
     const { appointmentId, time } = req.query;
@@ -99,111 +105,72 @@ exports.confirmAppointmentTime = async (req, res) => {
 
     const doctorName = appointment.doctorId.name;
 
+    console.log("📤 Sending confirmation to:", appointment.email);
+
     const userMail = {
-      from: process.env.EMAIL_USER,
+      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
       to: appointment.email,
-      subject: "Your Appointment is Confirmed",
+      subject: "Appointment Confirmed",
       html: `
         <h2>Appointment Confirmed</h2>
         <p>Hi ${appointment.name},</p>
-        <p>Your appointment with <strong>Dr. ${doctorName}</strong> is confirmed for <strong>${time}</strong> on <strong>${new Date(
-        appointment.date
-      ).toDateString()}</strong>.</p>
-        <p><strong>Your Concern:</strong> ${appointment.concern || "N/A"}</p>
+        <p>Your appointment with <strong>Dr. ${doctorName}</strong> is confirmed.</p>
+        <p><strong>Time:</strong> ${time}</p>
+        <p><strong>Date:</strong> ${new Date(appointment.date).toDateString()}</p>
       `,
     };
 
-   try {
-  await transporter.sendMail(userMail);
-  console.log("📩 Confirmation email sent to user:", appointment.email);
-} catch (err) {
-  console.error("❌ Email failed:", err.message);
-}
+    try {
+      const info = await transporter.sendMail(userMail);
+      console.log("✅ Confirmation email sent:", info.response);
+    } catch (err) {
+      console.error("❌ Email error:", err);
+    }
 
     await Appointment.findByIdAndUpdate(appointmentId, {
       status: "confirmed",
       timeOfDay: time,
     });
 
-    await Notification.create({
-      email: appointment.email,
-      message: `Your appointment with Dr. ${doctorName} is confirmed for ${time}.`,
-    });
-
-    req.app.get("io")?.emit("newNotification", {
-      email: appointment.email,
-      message: `Your appointment with Dr. ${doctorName} is confirmed for ${time}.`,
-    });
-
     res.send(`
-      <h2>✅ Appointment Confirmed for ${time}</h2>
-      <p>Email confirmation sent to the patient.</p>
+      <h2>✅ Appointment Confirmed</h2>
+      <p>Email sent to patient.</p>
     `);
+
   } catch (error) {
     console.error("❌ Error confirming appointment:", error);
     res.status(500).send("Server Error");
   }
 };
 
-// 3. Get appointments by email
-exports.getAppointmentsByEmail = async (req, res) => {
-  try {
-    const email = req.params.email;
-
-    const appointments = await Appointment.find({
-      email,
-      status: "confirmed",
-    }).populate("doctorId");
-
-    if (!appointments.length) {
-      return res.status(404).json({ message: "No confirmed appointments found." });
-    }
-
-    res.status(200).json(appointments);
-  } catch (error) {
-    console.error("❌ Error fetching appointments by email:", error);
-    res.status(500).json({ message: "Server Error" });
-  }
-};
-
-// 4. Cancel appointment
+// 3. Cancel appointment
 exports.deleteAppointment = async (req, res) => {
   try {
-    const appointmentId = req.params.id;
+    const appointment = await Appointment.findById(req.params.id).populate("doctorId");
+    if (!appointment) return res.status(404).json({ message: "Not found" });
 
-    const appointment = await Appointment.findById(appointmentId).populate("doctorId");
-    if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found." });
-    }
-
-    const doctor = appointment.doctorId;
+    console.log("📤 Sending cancellation email to:", appointment.doctorId.email);
 
     const cancelMailOptions = {
-      from: process.env.EMAIL_USER,
-      to: doctor.email,
-      subject: `Appointment Cancelled by ${appointment.name}`,
-      html: `
-        <h2>Appointment Cancelled</h2>
-        <p><strong>Patient Name:</strong> ${appointment.name}</p>
-        <p><strong>Email:</strong> ${appointment.email}</p>
-        <p><strong>Concern:</strong> ${appointment.concern || "N/A"}</p>
-        <p>The appointment scheduled for <strong>${new Date(appointment.date).toDateString()}</strong> 
-        (${appointment.timeOfDay || "Not Set"}) has been cancelled by the patient.</p>
-      `,
+      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
+      to: appointment.doctorId.email,
+      subject: "Appointment Cancelled",
+      html: `<p>Appointment cancelled by ${appointment.name}</p>`,
     };
 
     try {
-  await transporter.sendMail(cancelMailOptions);
-  console.log("📩 Cancellation email sent to doctor:", doctor.email);
-} catch (err) {
-  console.error("❌ Email failed:", err.message);
-}
+      await transporter.sendMail(cancelMailOptions);
+      console.log("✅ Cancellation email sent");
+    } catch (err) {
+      console.error("❌ Email error:", err);
+    }
 
-    await Appointment.findByIdAndDelete(appointmentId);
+    await Appointment.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({ message: "Appointment cancelled and doctor notified." });
+    res.json({ message: "Cancelled successfully" });
+
   } catch (error) {
-    console.error("❌ Error cancelling appointment:", error);
+    console.error("❌ Cancel error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
