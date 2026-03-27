@@ -75,6 +75,11 @@ component: RemedyList,
     component: DietPlansPage,
   },
   {
+  path: '/view-appointments',
+  name: 'ViewAppointments',
+  component: Schedule,
+},
+  {
     path: '/saved',
     name: 'Saved',
     component: Saved,
