@@ -19,8 +19,9 @@ app.use(express.json());
 // CORS (allow all for now, later restrict to frontend URL)
 app.use(
   cors({
-    origin: "*",
+    origin: "https://ayurcure-project.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 
@@ -68,7 +69,7 @@ app.use("/api/saved", savedRemedyRoutes);
 // =====================
 const io = new Server(server, {
   cors: {
-    origin: "*", // change to your frontend URL later
+    origin: "https://ayurcure-project.vercel.app",
     methods: ["GET", "POST"],
   },
 });
