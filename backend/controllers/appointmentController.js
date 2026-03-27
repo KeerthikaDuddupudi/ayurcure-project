@@ -16,6 +16,9 @@ const transporter = nodemailer.createTransport({
 exports.createAppointment = async (req, res) => {
   try {
     const { name, email, phone, date, doctorId, concern } = req.body;
+    if (!name || !email || !phone || !date || !doctorId) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
     console.log("📥 New appointment request received:", req.body);
 
@@ -189,8 +192,12 @@ exports.deleteAppointment = async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(cancelMailOptions);
-    console.log("📩 Cancellation email sent to doctor:", doctor.email);
+    try {
+  await transporter.sendMail(cancelMailOptions);
+  console.log("📩 Cancellation email sent to doctor:", doctor.email);
+} catch (err) {
+  console.error("❌ Email failed:", err.message);
+}
 
     await Appointment.findByIdAndDelete(appointmentId);
 
