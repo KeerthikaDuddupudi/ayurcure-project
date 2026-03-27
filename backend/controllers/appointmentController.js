@@ -14,18 +14,7 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
 });
-try {
-  console.log("🚀 Trying to send email...");
 
-  const info = await transporter.sendMail(mailOptions);
-
-  console.log("✅ Email sent successfully!");
-  console.log("📨 Response:", info);
-
-} catch (err) {
-  console.error("❌ Email FAILED:");
-  console.error(err);
-}
 
 // 1. Book appointment, notify doctor
 exports.createAppointment = async (req, res) => {
@@ -89,6 +78,16 @@ console.log("Doctor email from DB:", doctor.email);
         ${timeButtons}
       `,
     };
+    try {
+  console.log("🚀 Sending email...");
+
+  const info = await transporter.sendMail(mailOptions);
+
+  console.log("✅ Email sent:", info.response);
+
+} catch (err) {
+  console.error("❌ Email error:", err);
+}
 
     try {
       const info = await transporter.sendMail(mailOptions);
