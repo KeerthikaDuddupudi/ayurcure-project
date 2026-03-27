@@ -27,11 +27,12 @@ exports.createAppointment = async (req, res) => {
 
     const doctor = await Doctor.findById(doctorId);
 
-console.log("Doctor email from DB:", doctor.email); // 👈 ADD HERE
-
 if (!doctor) {
+  console.log("❌ Doctor not found");
   return res.status(404).json({ message: "Doctor not found" });
 }
+
+console.log("Doctor email from DB:", doctor.email);
 
     const appointment = await Appointment.create({
       name,
