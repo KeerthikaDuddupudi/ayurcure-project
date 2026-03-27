@@ -89,12 +89,7 @@ console.log("Doctor email from DB:", doctor.email);
   console.error("❌ Email error:", err);
 }
 
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log("✅ Email sent:", info.response);
-    } catch (err) {
-      console.error("❌ Email error:", err);
-    }
+    
 
     await Notification.create({
       email,
