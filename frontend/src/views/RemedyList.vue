@@ -106,11 +106,14 @@ import { useSavedRemedies } from '@/composables/savedRemedies'
 import { useI18n } from 'vue-i18n'
 
 const { saveRemedy } = useSavedRemedies()
-const { locale } = useI18n() // 🔁 get current language from i18n
+const { locale } = useI18n()
 
 const route = useRoute()
 const searchTerm = ref(route.query.category || '')
 const remedies = ref([])
+
+// ✅ Use environment variable
+const API = import.meta.env.VITE_API_URL
 
 const saveCurrentRemedy = (remedy) => {
   saveRemedy(remedy)
@@ -122,7 +125,8 @@ const fetchRemedies = async () => {
   const lang = localStorage.getItem('lang') || 'en';
   const category = encodeURIComponent(searchTerm.value.trim());
 
-  const url = `http://localhost:5000/api/remedies/${category}?lang=${lang}`;
+  // ✅ FIXED URL
+  const url = `${API}/api/remedies/${category}?lang=${lang}`;
   console.log('Fetching remedies from:', url);
 
   try {
@@ -130,15 +134,12 @@ const fetchRemedies = async () => {
     const result = await res.json();
     console.log('Fetched result:', result);
 
-    // Adjust based on response shape
     remedies.value = Array.isArray(result.title) ? result.title : result;
   } catch (err) {
     console.error('Error fetching remedies:', err);
     remedies.value = [];
   }
 };
-
-
 
 // Run on first load
 onMounted(() => {
@@ -154,12 +155,11 @@ watch(
   }
 )
 
-// Optional: Re-fetch when language changes
+// Re-fetch when language changes
 watch(locale, () => {
   fetchRemedies()
 })
 </script>
-
 
 
 <style scoped>

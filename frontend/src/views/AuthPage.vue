@@ -1,6 +1,7 @@
 <template>
   <div class="auth-page">
     <div :class="['container', { 'right-panel-active': isSignUpActive }]">
+      
       <!-- Sign Up Form -->
       <div class="form-container sign-up-container">
         <form @submit.prevent="handleSignUp">
@@ -48,29 +49,30 @@
         </form>
       </div>
 
-      <!-- Overlay Panels -->
+      <!-- Overlay -->
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-panel overlay-left">
             <h1 style="color:white;">Welcome Back to AyurCure!</h1>
-            <p>Your path to natural wellness continues here.<br />Please log in with your personal details.</p>
+            <p>Please log in with your personal details.</p>
             <button class="ghost" @click="switchToSignIn">Sign In</button>
           </div>
           <div class="overlay-panel overlay-right">
             <h1 style="color:white;">Welcome to AyurCure</h1>
-            <p>Your natural health companion awaits!<br />Create your account and begin your healing journey today.</p>
+            <p>Create your account and begin your healing journey.</p>
             <button class="ghost" @click="switchToSignUp">Sign Up</button>
           </div>
         </div>
       </div>
+
     </div>
   </div>
-  
 </template>
 
 <script>
 import axios from 'axios';
-import HomeNav from '@/components/HomeNav.vue';
+
+const API = import.meta.env.VITE_API_URL;
 
 export default {
   name: 'Authentication',
@@ -79,10 +81,7 @@ export default {
       isSignUpActive: false,
       showForgotPassword: false,
       loading: false,
-      login: {
-        email: '',
-        password: ''
-      },
+      login: { email: '', password: '' },
       signUp: {
         name: '',
         phone: '',
@@ -92,9 +91,7 @@ export default {
         password: '',
         confirmPassword: ''
       },
-      reset: {
-        email: ''
-      },
+      reset: { email: '' },
       message: '',
       messageColor: 'green'
     };
@@ -148,7 +145,7 @@ export default {
           dob: this.signUp.dob,
         };
 
-        const { data } = await axios.post('http://localhost:5000/api/auth/signup', payload);
+        const { data } = await axios.post(`${API}/api/auth/signup`, payload);
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -165,7 +162,7 @@ export default {
     async handleLogin() {
       this.loading = true;
       try {
-        const { data } = await axios.post('http://localhost:5000/api/auth/login', this.login);
+        const { data } = await axios.post(`${API}/api/auth/login`, this.login);
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -182,9 +179,9 @@ export default {
     async handleReset() {
       this.loading = true;
       try {
-        const { data } = await axios.post('http://localhost:5000/api/auth/reset-password', this.reset);
+        const { data } = await axios.post(`${API}/api/auth/reset-password`, this.reset);
 
-        this.message = data.message || 'Recovery link sent to your email.';
+        this.message = data.message || 'Recovery link sent.';
         this.messageColor = 'green';
         this.reset.email = '';
 
@@ -201,6 +198,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

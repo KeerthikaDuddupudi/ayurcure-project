@@ -42,6 +42,9 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+// ✅ Backend URL from environment
+const API = import.meta.env.VITE_API_URL;
+
 const form = ref({
   name: '',
   email: '',
@@ -51,7 +54,7 @@ const form = ref({
 
 const handleSubmit = async () => {
   try {
-    await fetch('http://localhost:5000/api/contact', {
+    await fetch(`${API}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form.value)
@@ -64,7 +67,6 @@ const handleSubmit = async () => {
     alert('Failed to send message. Try again.');
   }
 };
-
 </script>
 
 <style scoped>

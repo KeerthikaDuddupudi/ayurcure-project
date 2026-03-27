@@ -94,6 +94,9 @@ import defaultDoctorImage from '../assets/doctor.png'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
+// ✅ Use only env variable (NO localhost fallback)
+const API = import.meta.env.VITE_API_URL
+
 // State
 const selectedDate = ref(new Date().toISOString().substr(0, 10))
 const selectedTime = ref('')
@@ -105,7 +108,6 @@ const email = ref('')
 const morningSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']
 const eveningSlots = ['5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM']
 
-// Load email from localStorage on mount
 onMounted(() => {
   try {
     const storedEmail = localStorage.getItem('userEmail')
@@ -114,7 +116,7 @@ onMounted(() => {
       fetchAppointments()
     }
   } catch (err) {
-    console.error('❌ Failed to load email from localStorage:', err)
+    console.error('❌ Failed to load email:', err)
   }
 })
 
@@ -131,11 +133,8 @@ const setEmail = () => {
 const fetchAppointments = async () => {
   if (!email.value) return
 
-  const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-  const apiUrl = `${baseURL}/api/appointments/user/${email.value}`
-
   try {
-    const res = await axios.get(apiUrl)
+    const res = await axios.get(`${API}/api/appointments/user/${email.value}`)
     appointments.value = res.data.filter(a => a.status?.toLowerCase() === 'confirmed')
   } catch (err) {
     console.error('❌ Error fetching appointments:', err.message)
@@ -145,8 +144,7 @@ const fetchAppointments = async () => {
 
 const cancelAppointment = async (id) => {
   try {
-    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-    await axios.delete(`${baseURL}/api/appointments/${id}`)
+    await axios.delete(`${API}/api/appointments/${id}`)
     alert('✅ Appointment cancelled successfully.')
     fetchAppointments()
   } catch (err) {
@@ -155,7 +153,7 @@ const cancelAppointment = async (id) => {
   }
 }
 
-// Filtered appointments
+// Filter
 const filteredAppointments = computed(() => {
   return appointments.value.filter(appointment => {
     const appointmentDate = new Date(appointment.date).toISOString().substr(0, 10)
@@ -163,7 +161,7 @@ const filteredAppointments = computed(() => {
   })
 })
 
-// PDF Download
+// PDF
 const downloadPDF = async () => {
   const element = document.getElementById('pdf-content')
   if (!element) return
@@ -171,13 +169,12 @@ const downloadPDF = async () => {
   const canvas = await html2canvas(element, { scale: 2 })
   const imgData = canvas.toDataURL('image/png')
   const pdf = new jsPDF('p', 'mm', 'a4')
-  const pageWidth = pdf.internal.pageSize.getWidth()
-  const pageHeight = pdf.internal.pageSize.getHeight()
-  const imgProps = pdf.getImageProperties(imgData)
-  const pdfWidth = pageWidth
-  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
 
-  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+  const pageWidth = pdf.internal.pageSize.getWidth()
+  const imgProps = pdf.getImageProperties(imgData)
+  const pdfHeight = (imgProps.height * pageWidth) / imgProps.width
+
+  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight)
   pdf.save('appointments.pdf')
 }
 </script>
