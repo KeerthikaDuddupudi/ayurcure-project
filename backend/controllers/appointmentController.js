@@ -5,13 +5,18 @@ const nodemailer = require("nodemailer");
 
 // ✅ UPDATED Nodemailer setup (IMPORTANT)
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+});
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ SMTP Error:", error);
+  } else {
+    console.log("✅ SMTP Ready");
+  }
 });
 
 // 1. Book appointment, notify doctor
@@ -63,7 +68,7 @@ console.log("Doctor email from DB:", doctor.email);
 
     const mailOptions = {
       from: `"AyurCure" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Send to admin email for testing
+      to: doctor.email,
       subject: `New Appointment Request from ${name}`,
       html: `
         <h2>New Appointment Request</h2>
