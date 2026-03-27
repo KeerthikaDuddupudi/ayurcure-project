@@ -138,7 +138,7 @@ export default {
       if (!email) return
 
       try {
-        const res = await axios.get(`http://localhost:5000/api/notifications/${email}`)
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications/${email}`);
         notifications.value = [...res.data].reverse().map(enhanceNotification)
 
         unreadCount.value = notifications.value.length

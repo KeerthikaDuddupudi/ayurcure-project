@@ -178,3 +178,25 @@ exports.deleteAppointment = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+// 3. Get appointments by email
+exports.getAppointmentsByEmail = async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    const appointments = await Appointment.find({
+      email,
+      status: "confirmed",
+    }).populate("doctorId");
+
+    if (!appointments.length) {
+      return res.status(404).json({ message: "No appointments found" });
+    }
+
+    res.status(200).json(appointments);
+
+  } catch (error) {
+    console.error("❌ Error fetching appointments:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

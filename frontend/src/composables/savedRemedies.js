@@ -3,82 +3,79 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
+// ✅ FIX: Use environment variable
+const API = import.meta.env.VITE_API_URL;
+
 export function useSavedRemedies() {
   const savedRemedies = ref([]);
   const userEmail = ref('');
 
-  // Load user email from localStorage
   const loadEmailFromStorage = () => {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
       userEmail.value = storedEmail;
-      console.log('✅ Loaded userEmail from localStorage:', storedEmail);
+      console.log('✅ Loaded userEmail:', storedEmail);
     } else {
-      console.warn("⚠️ No userEmail found in localStorage");
+      console.warn("⚠️ No userEmail found");
     }
   };
 
-  // Fetch saved remedies
+  // ✅ Fetch saved remedies
   const fetchSavedRemedies = async () => {
     if (!userEmail.value) loadEmailFromStorage();
-    if (!userEmail.value) {
-      console.error("⚠️ Cannot fetch remedies. User email is not set.");
-      return;
-    }
+    if (!userEmail.value) return;
 
     try {
-      const res = await axios.get('http://localhost:5000/api/saved/get', {
+      const res = await axios.get(`${API}/api/saved/get`, {
         params: { userEmail: userEmail.value }
-
       });
+
       savedRemedies.value = res.data;
-      console.log("✅ Remedies fetched:", savedRemedies.value);
+      console.log("✅ Remedies fetched:", res.data);
+
     } catch (error) {
       console.error("❌ Error fetching remedies:", error.message);
     }
   };
 
-  // Save remedy
+  // ✅ Save remedy
   const saveRemedy = async (remedy) => {
     if (!userEmail.value) loadEmailFromStorage();
-    if (!userEmail.value) {
-      console.error("❌ Error saving remedy: User email not set.");
-      return;
-    }
+    if (!userEmail.value) return;
 
     try {
-      await axios.post('http://localhost:5000/api/saved/save', {
+      await axios.post(`${API}/api/saved/save`, {
         userEmail: userEmail.value,
         remedy
       });
+
       console.log("✅ Remedy saved");
-      await fetchSavedRemedies(); // refresh after save
+      await fetchSavedRemedies();
+
     } catch (error) {
       console.error("❌ Error saving remedy:", error.message);
     }
   };
 
-  // Delete remedy
+  // ✅ Delete remedy
   const removeRemedy = async (id) => {
     if (!userEmail.value) loadEmailFromStorage();
-    if (!userEmail.value) {
-      console.error("❌ Error removing remedy: User email not set.");
-      return;
-    }
+    if (!userEmail.value) return;
 
     try {
-      await axios.post('http://localhost:5000/api/saved/delete', {
+      await axios.post(`${API}/api/saved/delete`, {
         userEmail: userEmail.value,
         id
       });
+
       console.log("🗑️ Remedy deleted");
-      await fetchSavedRemedies(); // refresh after delete
+      await fetchSavedRemedies();
+
     } catch (error) {
       console.error("❌ Error removing remedy:", error.message);
     }
   };
 
-  // Load email on composable mount
   onMounted(() => {
     loadEmailFromStorage();
   });
@@ -86,7 +83,6 @@ export function useSavedRemedies() {
   return {
     savedRemedies,
     userEmail,
-    loadEmailFromStorage,
     fetchSavedRemedies,
     saveRemedy,
     removeRemedy
