@@ -26,6 +26,9 @@ exports.createAppointment = async (req, res) => {
     console.log("📥 New appointment request:", req.body);
 
     const doctor = await Doctor.findById(doctorId);
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+   console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
+console.log("Doctor email:", doctor?.email);
 
 if (!doctor) {
   console.log("❌ Doctor not found");
