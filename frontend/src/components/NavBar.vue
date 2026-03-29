@@ -110,7 +110,14 @@ export default {
         title = 'New Remedy Saved'
         link = '/saved-remedies'
         cta = 'View Remedy'
-      } else if (message.includes('appointment')) {
+      } else if (message.toLowerCase().includes('confirm')) {
+  icon = '✅'
+  title = 'Appointment Confirmed'
+  link = '/schedule'   // 👈 you can change if needed
+  cta = 'View Appointment'
+
+}
+      else if (message.includes('appointment')) {
         icon = '📅'
         title = 'Appointment Reminder'
         link = '/schedule'
