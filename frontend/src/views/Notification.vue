@@ -51,11 +51,14 @@ const enhanceNotification = (notif) => {
     title = 'Remedy Saved'
     emoji = '🧴'
     image = 'https://cdn-icons-png.flaticon.com/512/2965/2965567.png'
-  } else if (notif.message.includes('appointment')) {
-    title = 'Appointment Booked'
-    emoji = '📅'
-    image = 'https://cdn-icons-png.flaticon.com/512/1087/1087929.png'
-  } else if (notif.message.includes('cancel')) {
+  } else if (
+  notif.message.toLowerCase().includes('appointment') ||
+  notif.message.toLowerCase().includes('confirm')
+) {
+  title = 'Appointment Confirmed'
+  emoji = '✅'
+  image = 'https://cdn-icons-png.flaticon.com/512/190/190411.png'
+} else if (notif.message.toLowerCase().includes('cancel')) {
     title = 'Cancelled'
     emoji = '❌'
     image = 'https://cdn-icons-png.flaticon.com/512/753/753345.png'
