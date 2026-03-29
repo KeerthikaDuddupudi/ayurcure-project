@@ -128,6 +128,16 @@ exports.confirmAppointmentTime = async (req, res) => {
       status: "confirmed",
       timeOfDay: time,
     });
+    await Notification.create({
+  email: appointment.email,
+  message: `Your appointment with Dr. ${doctorName} is confirmed at ${time}`,
+});
+
+// ✅ OPTIONAL SOCKET
+req.app.get("io")?.emit("newNotification", {
+  email: appointment.email,
+  message: `Your appointment with Dr. ${doctorName} is confirmed at ${time}`,
+});
 
     res.send(`
       <h2>✅ Appointment Confirmed</h2>
