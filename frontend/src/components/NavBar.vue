@@ -125,7 +125,7 @@ export default {
       } else if (message.includes('cancel')) {
         icon = '❌'
         title = 'Appointment Cancelled'
-        link = '/appointments'
+        link = '/schedule'
         cta = 'View Cancellation'
       }
 
