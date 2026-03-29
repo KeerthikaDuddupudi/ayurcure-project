@@ -100,7 +100,7 @@ exports.requestResetPassword = async (req, res) => {
     user.resetTokenExpiry = expiry;
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    const resetLink = `https://ayurcure-project.vercel.app/reset-password/${token}`;
 
     await sendEmail({
       to: email,

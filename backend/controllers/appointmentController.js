@@ -51,7 +51,7 @@ exports.createAppointment = async (req, res) => {
       console.log("🚀 Sending email via Resend...");
 
       await resend.emails.send({
-        from: process.env.EMAIL_USER, // onboarding@resend.dev
+        from: "onboarding@resend.dev",
         to: doctor.email,
         subject: `New Appointment Request from ${doctor.name}`,
         html: `
@@ -106,7 +106,7 @@ exports.confirmAppointmentTime = async (req, res) => {
 
     try {
       await resend.emails.send({
-        from: process.env.EMAIL_USER,
+        from: "onboarding@resend.dev",
         to: appointment.email,
         subject: "Appointment Confirmed",
         html: `
@@ -151,7 +151,7 @@ exports.deleteAppointment = async (req, res) => {
 
     try {
       await resend.emails.send({
-        from: process.env.EMAIL_USER,
+        from: "onboarding@resend.dev",
         to: appointment.doctorId.email,
         subject: "Appointment Cancelled",
         html: `<p>Appointment cancelled by ${appointment.name}</p>`,
