@@ -52,7 +52,7 @@ exports.createAppointment = async (req, res) => {
 
       await resend.emails.send({
         from: "onboarding@resend.dev",
-        to: doctor.email,
+        to: "ayurcure63@gmail.com",
         subject: `New Appointment Request from ${doctor.name}`,
         html: `
           <h2>New Appointment Request</h2>
@@ -107,7 +107,7 @@ exports.confirmAppointmentTime = async (req, res) => {
     try {
       await resend.emails.send({
         from: "onboarding@resend.dev",
-        to: appointment.email,
+        to: "ayurcure63@gmail.com",
         subject: "Appointment Confirmed",
         html: `
           <h2>Appointment Confirmed</h2>
@@ -152,7 +152,7 @@ exports.deleteAppointment = async (req, res) => {
     try {
       await resend.emails.send({
         from: "onboarding@resend.dev",
-        to: appointment.doctorId.email,
+        to: "ayurcure63@gmail.com",
         subject: "Appointment Cancelled",
         html: `<p>Appointment cancelled by ${appointment.name}</p>`,
       });
