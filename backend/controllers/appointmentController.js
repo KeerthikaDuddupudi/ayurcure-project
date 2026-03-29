@@ -1,25 +1,10 @@
 const Appointment = require("../models/Appointment");
 const Doctor = require("../models/Doctor");
 const Notification = require("../models/Notification");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-// ✅ UPDATED Nodemailer setup (IMPORTANT)
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 10000, // ⬅️ add this
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
+// ✅ Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // 1. Book appointment, notify doctor
 exports.createAppointment = async (req, res) => {
@@ -33,16 +18,12 @@ exports.createAppointment = async (req, res) => {
     console.log("📥 New appointment request:", req.body);
 
     const doctor = await Doctor.findById(doctorId);
-    console.log("EMAIL_USER:", process.env.EMAIL_USER);
-   console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
-console.log("Doctor email:", doctor?.email);
+    if (!doctor) {
+      console.log("❌ Doctor not found");
+      return res.status(404).json({ message: "Doctor not found" });
+    }
 
-if (!doctor) {
-  console.log("❌ Doctor not found");
-  return res.status(404).json({ message: "Doctor not found" });
-}
-
-console.log("Doctor email from DB:", doctor.email);
+    console.log("📤 Sending email to doctor:", doctor.email);
 
     const appointment = await Appointment.create({
       name,
@@ -66,37 +47,31 @@ console.log("Doctor email from DB:", doctor.email);
       )
       .join("");
 
-    console.log("📤 Sending email to doctor:", doctor.email);
-
-    const mailOptions = {
-      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
-      to: doctor.email,
-      subject: `New Appointment Request from ${name}`,
-      html: `
-        <h2>New Appointment Request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Concern:</strong> ${concern || "N/A"}</p>
-        <p><strong>Date:</strong> ${new Date(date).toDateString()}</p>
-        <p>Please select a time:</p>
-        ${timeButtons}
-      `,
-    };
     try {
-  console.log("🚀 Sending email...");
-  console.log("Before sendMail");
+      console.log("🚀 Sending email via Resend...");
 
-  const info = await transporter.sendMail(mailOptions);
+      await resend.emails.send({
+        from: process.env.EMAIL_USER, // onboarding@resend.dev
+        to: doctor.email,
+        subject: `New Appointment Request from ${doctor.name}`,
+        html: `
+          <h2>New Appointment Request</h2>
+          <p><strong>Doctor:</strong> Dr. ${doctor.name}</p>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Concern:</strong> ${concern || "N/A"}</p>
+          <p><strong>Date:</strong> ${new Date(date).toDateString()}</p>
+          <p>Please select a time:</p>
+          ${timeButtons}
+        `,
+      });
 
-  console.log("After sendMail", info);
-  console.log("✅ Email sent:", info.response);
+      console.log("✅ Email sent successfully");
 
-} catch (err) {
-  console.error("❌ FULL ERROR:", JSON.stringify(err, null, 2));
-}
-
-    
+    } catch (err) {
+      console.error("❌ Email error:", err);
+    }
 
     await Notification.create({
       email,
@@ -116,6 +91,7 @@ console.log("Doctor email from DB:", doctor.email);
   }
 };
 
+
 // 2. Confirm appointment
 exports.confirmAppointmentTime = async (req, res) => {
   try {
@@ -128,22 +104,22 @@ exports.confirmAppointmentTime = async (req, res) => {
 
     console.log("📤 Sending confirmation to:", appointment.email);
 
-    const userMail = {
-      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
-      to: appointment.email,
-      subject: "Appointment Confirmed",
-      html: `
-        <h2>Appointment Confirmed</h2>
-        <p>Hi ${appointment.name},</p>
-        <p>Your appointment with <strong>Dr. ${doctorName}</strong> is confirmed.</p>
-        <p><strong>Time:</strong> ${time}</p>
-        <p><strong>Date:</strong> ${new Date(appointment.date).toDateString()}</p>
-      `,
-    };
-
     try {
-      const info = await transporter.sendMail(userMail);
-      console.log("✅ Confirmation email sent:", info.response);
+      await resend.emails.send({
+        from: process.env.EMAIL_USER,
+        to: appointment.email,
+        subject: "Appointment Confirmed",
+        html: `
+          <h2>Appointment Confirmed</h2>
+          <p>Hi ${appointment.name},</p>
+          <p>Your appointment with <strong>Dr. ${doctorName}</strong> is confirmed.</p>
+          <p><strong>Time:</strong> ${time}</p>
+          <p><strong>Date:</strong> ${new Date(appointment.date).toDateString()}</p>
+        `,
+      });
+
+      console.log("✅ Confirmation email sent");
+
     } catch (err) {
       console.error("❌ Email error:", err);
     }
@@ -164,6 +140,7 @@ exports.confirmAppointmentTime = async (req, res) => {
   }
 };
 
+
 // 3. Cancel appointment
 exports.deleteAppointment = async (req, res) => {
   try {
@@ -172,16 +149,16 @@ exports.deleteAppointment = async (req, res) => {
 
     console.log("📤 Sending cancellation email to:", appointment.doctorId.email);
 
-    const cancelMailOptions = {
-      from: `"AyurCure" <${process.env.EMAIL_USER}>`,
-      to: appointment.doctorId.email,
-      subject: "Appointment Cancelled",
-      html: `<p>Appointment cancelled by ${appointment.name}</p>`,
-    };
-
     try {
-      await transporter.sendMail(cancelMailOptions);
+      await resend.emails.send({
+        from: process.env.EMAIL_USER,
+        to: appointment.doctorId.email,
+        subject: "Appointment Cancelled",
+        html: `<p>Appointment cancelled by ${appointment.name}</p>`,
+      });
+
       console.log("✅ Cancellation email sent");
+
     } catch (err) {
       console.error("❌ Email error:", err);
     }
@@ -196,7 +173,8 @@ exports.deleteAppointment = async (req, res) => {
   }
 };
 
-// 3. Get appointments by email
+
+// 4. Get appointments by email
 exports.getAppointmentsByEmail = async (req, res) => {
   try {
     const email = req.params.email;
