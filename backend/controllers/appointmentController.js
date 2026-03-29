@@ -5,11 +5,16 @@ const nodemailer = require("nodemailer");
 
 // ✅ UPDATED Nodemailer setup (IMPORTANT)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 10000, // ⬅️ add this
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
   tls: {
     rejectUnauthorized: false,
   },
@@ -80,13 +85,15 @@ console.log("Doctor email from DB:", doctor.email);
     };
     try {
   console.log("🚀 Sending email...");
+  console.log("Before sendMail");
 
   const info = await transporter.sendMail(mailOptions);
 
+  console.log("After sendMail", info);
   console.log("✅ Email sent:", info.response);
 
 } catch (err) {
-  console.error("❌ Email error:", err);
+  console.error("❌ FULL ERROR:", JSON.stringify(err, null, 2));
 }
 
     
