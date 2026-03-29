@@ -113,7 +113,7 @@ export default {
       } else if (message.includes('appointment')) {
         icon = '📅'
         title = 'Appointment Reminder'
-        link = '/appointments'
+        link = '/schedule'
         cta = 'View Appointment'
       } else if (message.includes('cancel')) {
         icon = '❌'
