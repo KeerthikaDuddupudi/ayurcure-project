@@ -76,9 +76,10 @@ export function useSavedRemedies() {
     }
   };
 
-  onMounted(() => {
-    loadEmailFromStorage();
-  });
+  onMounted(async () => {
+  loadEmailFromStorage();
+  await fetchSavedRemedies();   // 🔥 IMPORTANT
+});
 
   return {
     savedRemedies,
