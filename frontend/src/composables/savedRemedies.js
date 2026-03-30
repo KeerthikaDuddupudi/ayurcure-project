@@ -82,10 +82,11 @@ export function useSavedRemedies() {
 });
 
   return {
-    savedRemedies,
-    userEmail,
-    fetchSavedRemedies,
-    saveRemedy,
-    removeRemedy
-  };
+  savedRemedies,
+  userEmail,
+  loadEmailFromStorage,   // 🔥 ADD THIS
+  fetchSavedRemedies,
+  saveRemedy,
+  removeRemedy
+};
 }
