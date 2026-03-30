@@ -108,13 +108,14 @@ export default {
       if (message.includes('remedy')) {
         icon = '🌿'
         title = 'New Remedy Saved'
-        link = '/remedielist'   // 👈 you can change if needed
+        link = '/saved'   // 👈 you can change if needed
         cta = 'View Remedy'
       } else if (message.toLowerCase().includes('confirm')) {
   icon = '✅'
   title = 'Appointment Confirmed'
   link = '/schedule'   // 👈 you can change if needed
   cta = 'View Appointment'
+  
 
 }
       else if (message.includes('appointment')) {
