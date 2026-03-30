@@ -108,7 +108,7 @@ export default {
       if (message.includes('remedy')) {
         icon = '🌿'
         title = 'New Remedy Saved'
-        link = '/saved-remedies'
+        link = '/remedielist'   // 👈 you can change if needed
         cta = 'View Remedy'
       } else if (message.toLowerCase().includes('confirm')) {
   icon = '✅'
